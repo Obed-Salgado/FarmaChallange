@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_menu"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="dev.janus.farmachallange.ui.view.fragments.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_singleGameFragment"
+            app:destination="@id/singleGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleGameFragment"
+        android:name="dev.janus.farmachallange.ui.view.fragments.SingleGameFragment"
+        android:label="fragment_single_game"
+        tools:layout="@layout/fragment_single_game" />
+</navigation>

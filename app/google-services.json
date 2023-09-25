@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "110816623577",
+    "project_id": "farmachallange1",
+    "storage_bucket": "farmachallange1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110816623577:android:4e0193b9b930aac06bf7c8",
+        "android_client_info": {
+          "package_name": "dev.janus.farmachallange"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPsMDebvaGc5zcWnjygHYc9LKx8I6y9aA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

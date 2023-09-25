@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    //Paleta de colores
+    <color name="verde">#74C365</color>
+    <color name="amarillo">#FFB800</color>
+    <color name="morado">#6067A7</color>
+    <color name="backgroundDetails">#3A66FF</color>
+    <color name="azul">#2B28B9</color>>
+    <color name="rojo">#CA1717</color>>
+
+    <color name="azulU">#1A5C9F</color>
+    <color name="naranjaU">#EE5A26</color>
+    <color name="moradoU">#643880</color>
+    <color name="rosaU">#E75296</color>
+    <color name="verdeU">#2B9B47</color>
+    <color name="rojoU">#AD181E</color>
+</resources>
