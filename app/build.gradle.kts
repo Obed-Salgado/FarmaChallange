@@ -4,6 +4,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -71,7 +72,8 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //Corrutinas
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     // ViewModel and LiveData
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")

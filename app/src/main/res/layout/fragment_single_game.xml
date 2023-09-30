@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.view.fragments.SingleGameFragment">
 
     <!-- ConstraintLayout 2: Pregunta y temporizador -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/background_top"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,8 +21,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constrainText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
+            android:layout_height="180dp"
+            android:layout_margin="15dp"
             android:background="@drawable/background_question"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,17 +32,18 @@
 
             <TextView
                 android:id="@+id/tvPregunta"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="20dp"
-                android:text=""
+                android:gravity="center"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="¿Cuál de los siguientes se usa como antiespasmódico?" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -75,85 +76,84 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+       >
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChoice1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/background_button_choice"
-            android:text="Holaa"
             android:textAllCaps="false"
-            android:textColor="#ffff"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Holaa" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChoice2"
             android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/background_button_choice"
-            android:text="Holaa"
             android:textAllCaps="false"
-            android:textColor="#ffff"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnChoice1" />
+            app:layout_constraintTop_toBottomOf="@id/btnChoice1"
+            tools:text="Holaa" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChoice3"
             android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/background_button_choice"
-            android:text="Holaa"
-            android:textAllCaps="false"
-            android:textColor="#ffff"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnChoice2" />
+            app:layout_constraintTop_toBottomOf="@id/btnChoice2"
+            tools:text="Holaa" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChoice4"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/background_button_choice"
-            android:text="Holaa"
-            android:textAllCaps="false"
             android:textColor="#ffff"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnChoice3" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/btnChoice3"
+            tools:text="Holaa" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPreg"
+            android:layout_width="80dp"
+            android:layout_height="46dp"
+            android:background="@drawable/background_button_incorect"
+            android:drawableStart="@drawable/reloadcircle"
+            android:padding="10dp"
+            android:text="5"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnChoice4"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent">
+        </androidx.appcompat.widget.AppCompatButton>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnHelp"
@@ -168,26 +168,12 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.779"
-            app:layout_constraintStart_toEndOf="@+id/buttonPreg" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonPreg"
-            android:layout_width="80dp"
-            android:layout_height="46dp"
-            android:background="@drawable/background_button_incorect"
-            android:drawableStart="@drawable/reloadcircle"
-            android:padding="10dp"
-            android:text="5"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.087"
-            app:layout_constraintStart_toStartOf="parent">
-
-        </androidx.appcompat.widget.AppCompatButton>
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

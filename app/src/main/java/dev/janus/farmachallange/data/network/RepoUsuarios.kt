@@ -1,11 +1,12 @@
 package dev.janus.farmachallange.data.network
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.utils.UserManager
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class RepoUsuarios @Inject constructor(
@@ -22,7 +23,7 @@ class RepoUsuarios @Inject constructor(
         urlIcon: String,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
-    ){
+    ) {
         checkIfUserExists(usuario, email) { userExists ->
             if (userExists) {
                 onFailure("El nombre de usuario o correo electrónico ya están en uso.")
@@ -62,7 +63,12 @@ class RepoUsuarios @Inject constructor(
         }
     }
 
-    fun loginUser(email: String, password: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    fun loginUser(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -82,39 +88,23 @@ class RepoUsuarios @Inject constructor(
             }
     }
 
-    fun getUserData(idUser: String?): LiveData<Usuario?> {
-        val mutableData = MutableLiveData<Usuario?>()
 
-        if (idUser == null) {
-            mutableData.value = null
-        } else {
-            db.collection("usuarios").document(idUser)
-                .addSnapshotListener { documentSnapshot, exception ->
-                    if (exception != null) {
-                        // Manejar el error, si es necesario
-                        mutableData.value = null
-                        return@addSnapshotListener
-                    }
-
-                    if ((documentSnapshot != null) && documentSnapshot.exists()) {
-
-                       val usuario = documentSnapshot.toObject(Usuario::class.java)
-
-                        usuario?.id = idUser
-                        if ((usuario?.usuario != null) && (usuario.corazones > 0)) {
-                            UserManager.setUser(usuario)
-                            mutableData.value = usuario
-
-                        } else {
-                            mutableData.value = null
-                        }
-                    } else {
-                        mutableData.value = null
-                    }
-                }
+     suspend fun getUserData(idUser: String?): Flow<Usuario> = callbackFlow {
+        val eventDocument = db.collection("usuarios").document(idUser!!)
+        val suscripcion = eventDocument.addSnapshotListener{documentSnapshot, firebaseFirestoreException ->
+            if (documentSnapshot!!.exists()){
+                val user = documentSnapshot.toObject(Usuario::class.java)
+                user!!.id = documentSnapshot.id
+                UserManager.setUser(user!!)
+                trySend(user!!)
+            }
+            else{
+                channel.close(firebaseFirestoreException?.cause)
+            }
         }
-        return mutableData
+         awaitClose{suscripcion.remove()}
     }
+
 
     private fun checkIfUserExists(usuario: String, email: String, callback: (Boolean) -> Unit) {
         // Verificar si el nombre de usuario o correo electrónico ya existen

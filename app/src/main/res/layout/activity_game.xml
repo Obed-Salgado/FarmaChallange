@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context=".ui.view.GameActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintStatus"
         android:layout_width="match_parent"
-        android:padding="10dp"
         android:layout_height="70dp"
+        android:padding="10dp"
         android:background="@color/backgroundDetails"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -120,12 +121,25 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostFragmenttMenu"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/navigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintStatus"
-        app:navGraph ="@navigation/navigation_menu">
-    </androidx.fragment.app.FragmentContainerView>
+        app:navGraph="@navigation/navigation_menu"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundDetails"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:menu="@menu/botton_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

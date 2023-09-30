@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentProfileBinding
+import dev.janus.farmachallange.utils.UserManager
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding?=null
@@ -18,5 +19,15 @@ class ProfileFragment : Fragment() {
     ):View {
         _binding = FragmentProfileBinding.inflate(inflater,container,false)
         return binding.root
+
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpInfoUser()
+    }
+    fun setUpInfoUser(){
+        binding.tvName.text = UserManager.getInstanceUser().nombre
+        binding.tvEmail.text = UserManager.getInstanceUser().email
+        binding.tvMatricula.text = "Matricula: ${UserManager.getInstanceUser().matricula}"
     }
 }

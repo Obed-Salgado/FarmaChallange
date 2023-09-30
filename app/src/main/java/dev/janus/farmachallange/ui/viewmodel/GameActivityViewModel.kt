@@ -1,28 +1,27 @@
 package dev.janus.farmachallange.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.janus.farmachallange.data.model.Usuario
+
 import dev.janus.farmachallange.data.network.RepoEstadistica
-import dev.janus.farmachallange.data.network.RepoUsuarios
+import dev.janus.farmachallange.domain.GetUserUseCase
 import dev.janus.farmachallange.utils.UserManager
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel
-class GameActivityViewModel @Inject constructor(private val repoUser: RepoUsuarios, private val repoStatus: RepoEstadistica) :ViewModel() {
+class GameActivityViewModel @Inject constructor(private val getUserUseCase:GetUserUseCase, private val repoStatus: RepoEstadistica) :ViewModel() {
 
-    fun fetchUser(): LiveData<Usuario?> {
-        val userDataLiveData = MutableLiveData<Usuario?>()
-        val liveData =  repoUser.getUserData(UserManager.getInstanceUser().id)
-        liveData.observeForever { usuario ->
-            userDataLiveData.value = usuario
+        val fetchUser = liveData(Dispatchers.IO) {
+            getUserUseCase().collect{
+                emit(it)
+            }
         }
-        return userDataLiveData
-    }
+        fun updateHeats(hearts: Int) {
+            repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
+        }
 
-    fun updateHeats(hearts:Int){
-        repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
-    }
 }

@@ -11,12 +11,48 @@
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu" >
         <action
-            android:id="@+id/action_menuFragment_to_singleGameFragment"
-            app:destination="@id/singleGameFragment" />
+            android:id="@+id/action_menuFragment_to_rondasFragment"
+            app:destination="@id/rondasFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/singleGameFragment"
         android:name="dev.janus.farmachallange.ui.view.fragments.SingleGameFragment"
         android:label="fragment_single_game"
-        tools:layout="@layout/fragment_single_game" />
+        tools:layout="@layout/fragment_single_game" >
+        <argument
+            android:name="idNivel"
+            app:argType="string"
+            android:defaultValue="Guest" />
+        <argument
+            android:name="idRonda"
+            app:argType="string"
+            android:defaultValue="Guest" />
+    </fragment>
+    <fragment
+        android:id="@+id/rondasFragment"
+        android:name="dev.janus.farmachallange.ui.view.fragments.RondasFragment"
+        android:label="fragment_rondas"
+        tools:layout="@layout/fragment_rondas" >
+        <action
+            android:id="@+id/action_rondasFragment_to_singleGameFragment"
+            app:destination="@id/singleGameFragment" />
+        <argument
+            android:name="idRonda"
+            app:argType="string"
+            android:defaultValue="Guest" />
+        <action
+            android:id="@+id/action_rondasFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_rondasFragment_to_singleGameFragment2"
+            app:destination="@id/singleGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="dev.janus.farmachallange.ui.view.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

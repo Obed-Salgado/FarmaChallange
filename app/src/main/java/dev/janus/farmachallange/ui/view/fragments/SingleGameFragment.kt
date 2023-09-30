@@ -2,15 +2,17 @@ package dev.janus.farmachallange.ui.view.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentSingleGameBinding
@@ -18,17 +20,21 @@ import dev.janus.farmachallange.ui.view.dialog.EvaluationDialog
 import dev.janus.farmachallange.ui.viewmodel.SingleGameViewModel
 import dev.janus.farmachallange.utils.UserManager
 
+
 @AndroidEntryPoint
 class SingleGameFragment : Fragment() {
     private var _binding: FragmentSingleGameBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SingleGameViewModel by viewModels()
-
     private lateinit var buttonList: List<Button>
     private lateinit var description: String
     private lateinit var respuestaOk: String
     private lateinit var timer: CountDownTimer
+    private val args:SingleGameFragmentArgs by navArgs()
+    private lateinit var idNivel: String
+    private lateinit var idRonda: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,17 +42,18 @@ class SingleGameFragment : Fragment() {
     ): View {
         _binding = FragmentSingleGameBinding.inflate(inflater, container, false)
         return binding.root
-    }
+        
 
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        idNivel = args.idNivel
+        idRonda = args.idRonda
+        actualizarInterfaz()
         listaBotones()
         startTemp()
-        actualizarInterfaz()
-
         binding.buttonPreg.setOnClickListener {
-            if (UserManager.getInstanceUser().monedas != 0){
+            if (UserManager.getInstanceUser().monedas > 0){
                 viewModel.updateCoins(UserManager.getInstanceUser().monedas-5)
                 generarPregunta()
             }
@@ -164,33 +171,21 @@ class SingleGameFragment : Fragment() {
     }
 
     private fun actualizarInterfaz() {
-        viewModel.fetchQuestions()
+        viewModel.fetchQuestions(idNivel,idRonda)
         viewModel._pregunta.observe(viewLifecycleOwner, Observer { pregunta ->
-
             try {
                 binding.tvPregunta.text = pregunta.pregunta
-                buttonList[0].text = pregunta.distractor[0]
-                buttonList[1].text = pregunta.distractor[1]
-                buttonList[2].text = pregunta.distractor[2]
+                buttonList[0].text = pregunta.distractores[0]
+                buttonList[1].text = pregunta.distractores[1]
+                buttonList[2].text = pregunta.distractores[2]
                 buttonList[3].text = pregunta.respuesta
                 description = pregunta.descripcion
                 respuestaOk = pregunta.respuesta
             } catch (ex: Exception){
-                Toast.makeText(requireContext(), "Error: ${ex.message} \n ${pregunta.distractor.size}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error: ${ex.message} \n ${pregunta.distractores.size}", Toast.LENGTH_SHORT).show()
             }
         })
-
     }
-
-    /*    private fun observeDataPregunta() {
-            viewModel.fetchQuestions().observe(viewLifecycleOwner, Observer { pregunta ->
-                if (pregunta.isNotEmpty()) {
-                    actualizarInterfaz(pregunta.random())
-                } else {
-                    Toast.makeText(requireContext(), "Lista vacía", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }*/
 
     private fun showDialog(nameDialog: String) {
         val dialog = EvaluationDialog(
