@@ -43,12 +43,12 @@ class GameActivity : AppCompatActivity() {
                 binding.navigationView.visibility = View.VISIBLE
             }
         }
-
+        binding.navigationView.selectedItemId = R.id.inicio
         binding.navigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.inicio -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.menuFragment)
                 R.id.perfil -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.profileFragment)
-
+                R.id.progreso -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.progressFragment)
             }
 
             true

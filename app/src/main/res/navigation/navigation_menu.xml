@@ -17,6 +17,7 @@
             android:id="@+id/action_menuFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/singleGameFragment"
         android:name="dev.janus.farmachallange.ui.view.fragments.SingleGameFragment"
@@ -31,6 +32,7 @@
             app:argType="string"
             android:defaultValue="Guest" />
     </fragment>
+
     <fragment
         android:id="@+id/rondasFragment"
         android:name="dev.janus.farmachallange.ui.view.fragments.RondasFragment"
@@ -50,9 +52,16 @@
             android:id="@+id/action_rondasFragment_to_singleGameFragment2"
             app:destination="@id/singleGameFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="dev.janus.farmachallange.ui.view.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/progressFragment"
+        android:name="dev.janus.farmachallange.ui.view.fragments.ProgressFragment"
+        android:label="fragment_progress"
+        tools:layout="@layout/fragment_progress" />
 </navigation>
