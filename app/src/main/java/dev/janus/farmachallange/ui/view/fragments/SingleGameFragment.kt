@@ -2,39 +2,49 @@ package dev.janus.farmachallange.ui.view.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentSingleGameBinding
 import dev.janus.farmachallange.ui.view.dialog.EvaluationDialog
 import dev.janus.farmachallange.ui.viewmodel.SingleGameViewModel
+import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.UserManager
+import dev.janus.farmachallange.utils.clases.Timer
 
 
 @AndroidEntryPoint
-class SingleGameFragment : Fragment() {
+class SingleGameFragment() : Fragment() {
     private var _binding: FragmentSingleGameBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: SingleGameViewModel by viewModels()
     private lateinit var buttonList: List<Button>
     private lateinit var description: String
     private lateinit var respuestaOk: String
-    private lateinit var timer: CountDownTimer
-    private val args:SingleGameFragmentArgs by navArgs()
+    private val args: SingleGameFragmentArgs by navArgs()
     private lateinit var idNivel: String
     private lateinit var idRonda: String
+    private var pregunta: Int = 0
+    private lateinit var timer: Timer
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,22 +52,30 @@ class SingleGameFragment : Fragment() {
     ): View {
         _binding = FragmentSingleGameBinding.inflate(inflater, container, false)
         return binding.root
-        
+
+
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        onBackPressed()
+
+        timer = Timer(20000)
+        listaBotones()
+        timer.startTemp(onTick = { onTick(it) }, onFinish = { onFinish() })
         idNivel = args.idNivel
         idRonda = args.idRonda
+        viewModel.numberquest.observe(viewLifecycleOwner, Observer {
+            binding.tvCountQuest.text = it
+        })
         actualizarInterfaz()
-        listaBotones()
-        startTemp()
         binding.buttonPreg.setOnClickListener {
-            if (UserManager.getInstanceUser().monedas > 0){
-                viewModel.updateCoins(UserManager.getInstanceUser().monedas-5)
+            if (UserManager.getInstanceUser().monedas > 0) {
+                viewModel.updateCoins(UserManager.getInstanceUser().monedas - 5)
                 generarPregunta()
-            }
-            else
+            } else
                 overCoins()
         }
 
@@ -68,60 +86,62 @@ class SingleGameFragment : Fragment() {
         }
 
         binding.btnHelp.setOnClickListener {
-            if (UserManager.getInstanceUser().monedas != 0){
-                viewModel.updateCoins(UserManager.getInstanceUser().monedas-5)
+            if (UserManager.getInstanceUser().monedas != 0) {
+                viewModel.updateCoins(UserManager.getInstanceUser().monedas - 5)
                 deleteDistractor()
-            }
-            else
+            } else
                 overCoins()
+        }
+
+    }
+
+    //Este metodo sirve para que el usuario no pueda regresar al fragmento anterior por medio de la navegacion del dispositivo.
+    private fun onBackPressed(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+            }
+        })
+    }
+
+
+    private fun overCoins() {
+        Toast.makeText(requireContext(), "Te has quedado sin monedas", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun overHerts() {
+        Toast.makeText(requireContext(), "Te has quedado sin corazones", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.cancelTem()
+    }
+
+    private fun onTick(secondsRemaining: Long) {
+        if (UserManager.getInstanceUser().corazones != 0) {
+            binding.prbTiempo.progress += 5
+            binding.tvTiempo.text = secondsRemaining.toString()
         }
     }
 
-    private fun overCoins(){
-        Toast.makeText(requireContext(), "Te has quedado sin monedas",Toast.LENGTH_SHORT).show()
-    }
-
-    private fun overHerts(){
-        Toast.makeText(requireContext(), "Te has quedado sin corazones",Toast.LENGTH_SHORT).show()
-    }
-
-
-    private fun startTemp() {
-        if (UserManager.getInstanceUser().corazones!=0){
-            timer = object : CountDownTimer(20000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val secondsRemaining = millisUntilFinished / 1000
-                    binding.prbTiempo.progress += 5
-                    binding.tvTiempo.text = secondsRemaining.toString()
-
-                }
-
-                override fun onFinish() {
-                    if (UserManager.getInstanceUser().corazones != 0){
-                        showDialog("overtime")
-                        viewModel.updateHeats(UserManager.getInstanceUser().corazones - 1)
-                    }
-                    else
-                        overHerts()
-
-                }
-            }
-            timer.start()
-        }else
+    private fun onFinish() {
+        if (UserManager.getInstanceUser().corazones != 0) {
+            showDialog("overtime")
+            viewModel.updateHearts(UserManager.getInstanceUser().corazones - 1)
+        } else
             overHerts()
-
     }
 
     private fun reiniciarTemp() {
         binding.prbTiempo.progress = 0
-        timer.cancel()
-        startTemp()
+        timer.cancelTem()
+        timer.startTemp(onTick = { onTick(it) }, onFinish = { onFinish() })
     }
 
     private fun listaBotones() {
         buttonList = listOf(
             binding.btnChoice1, binding.btnChoice2, binding.btnChoice3, binding.btnChoice4
-        ).shuffled()
+        )
     }
 
     private fun generarPregunta() {
@@ -133,27 +153,27 @@ class SingleGameFragment : Fragment() {
     fun evaluarPregunta(butonRes: Button) {
         //Respuesta correcta
         if (UserManager.getInstanceUser().corazones != 0) {
-            timer.cancel()
+            timer.cancelTem()
             if (butonRes.text == respuestaOk) {
-                butonRes.background = requireContext().getDrawable(R.drawable.background_button_corect)
+                butonRes.background =
+                    requireContext().getDrawable(R.drawable.background_button_corect)
                 showDialog("correct")
                 viewModel.updateCoins(UserManager.getInstanceUser().monedas + 5)
             } else {
                 showDialog("incorrecto")
-                butonRes.background = requireContext().getDrawable(R.drawable.background_button_incorect)
+                butonRes.background =
+                    requireContext().getDrawable(R.drawable.background_button_incorect)
                 buscarRespuesta()
 
-                viewModel.updateHeats(UserManager.getInstanceUser().corazones - 1)
+                viewModel.updateHearts(UserManager.getInstanceUser().corazones - 1)
             }
-        }
-        else overHerts()
+        } else overHerts()
     }
 
 
     private fun deleteDistractor() {
-        val respuestaCorrecta = respuestaOk
         val indicesDistractores = buttonList.indices.filter { buttonIndex ->
-            buttonList[buttonIndex].text != respuestaCorrecta
+            buttonList[buttonIndex].text != respuestaOk
         }
         if (indicesDistractores.isNotEmpty()) {
             val indiceAleatorio = indicesDistractores.random()
@@ -164,27 +184,53 @@ class SingleGameFragment : Fragment() {
     private fun buscarRespuesta() {
         for (i in buttonList.indices) {
             if (buttonList[i].text == respuestaOk) {
-                buttonList[i].background = requireContext().getDrawable(R.drawable.background_button_corect)
+                buttonList[i].background =
+                    requireContext().getDrawable(R.drawable.background_button_corect)
                 break
             }
         }
     }
 
+    private fun showOverRodna() {
+        timer.cancelTem()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Ronda Terminada")
+        builder.setMessage("La ronda ha finalizado")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+            findNavController().navigate(R.id.action_singleGameFragment_to_menuFragment)
+            onDestroy()
+
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+
     private fun actualizarInterfaz() {
-        viewModel.fetchQuestions(idNivel,idRonda)
-        viewModel._pregunta.observe(viewLifecycleOwner, Observer { pregunta ->
+        pregunta++
+        viewModel.fetchQuestions(idNivel, idRonda, pregunta) { showOverRodna() }
+        viewModel.pregunta.observe(viewLifecycleOwner, Observer { pregunta ->
             try {
                 binding.tvPregunta.text = pregunta.pregunta
-                buttonList[0].text = pregunta.distractores[0]
-                buttonList[1].text = pregunta.distractores[1]
-                buttonList[2].text = pregunta.distractores[2]
-                buttonList[3].text = pregunta.respuesta
+                val opciones = mutableListOf<String>()
+                opciones.addAll(pregunta.distractores)
+                opciones.add(pregunta.respuesta)
+                opciones.shuffle()
+                for (i in opciones.indices) {
+                    buttonList[i].text = opciones[i]
+                }
                 description = pregunta.descripcion
                 respuestaOk = pregunta.respuesta
-            } catch (ex: Exception){
-                Toast.makeText(requireContext(), "Error: ${ex.message} \n ${pregunta.distractores.size}", Toast.LENGTH_SHORT).show()
+            } catch (ex: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "Error: ${ex.message} \n ${pregunta.distractores.size}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
+
+
     }
 
     private fun showDialog(nameDialog: String) {
@@ -197,7 +243,8 @@ class SingleGameFragment : Fragment() {
     private fun restablecerBotones() {
         for (i in buttonList.indices) {
             buttonList[i].isVisible = true
-            buttonList[i].background = requireContext().getDrawable(R.drawable.background_button_choice)
+            buttonList[i].background =
+                requireContext().getDrawable(R.drawable.background_button_choice)
         }
     }
 }

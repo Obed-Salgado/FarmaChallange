@@ -18,10 +18,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/tvCountQuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/prbTiempo"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="1/10" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constrainText"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="@drawable/background_question"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,6 +56,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="¿Cuál de los siguientes se usa como antiespasmódico?" />
+
+            <ProgressBar
+                android:id="@+id/progressQuest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:progressTint="@color/azulU"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                tools:visibility="visible"
+
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -80,8 +106,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-       >
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnChoice1"
@@ -130,19 +155,21 @@
             android:id="@+id/btnChoice4"
             android:layout_width="0dp"
             android:layout_height="45dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/background_button_choice"
             android:textColor="#ffff"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnChoice3"
             tools:text="Holaa" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonPreg"
             android:layout_width="80dp"
             android:layout_height="46dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/background_button_incorect"
             android:drawableStart="@drawable/reloadcircle"
             android:padding="10dp"
@@ -150,10 +177,8 @@
             android:textColor="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnChoice4"
-            android:layout_marginTop="40dp"
-            app:layout_constraintStart_toStartOf="parent">
-        </androidx.appcompat.widget.AppCompatButton>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnChoice4"></androidx.appcompat.widget.AppCompatButton>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnHelp"
@@ -172,8 +197,6 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

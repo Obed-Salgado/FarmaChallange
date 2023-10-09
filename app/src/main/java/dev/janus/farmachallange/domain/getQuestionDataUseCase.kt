@@ -6,12 +6,6 @@ import javax.inject.Inject
 
 class getQuestionDataUseCase @Inject constructor(private val repoPregunta: RepoPregunta) {
 
-    suspend operator fun invoke(idNivel:String, idRonda:String): Pregunta?{
-        val pregunta = repoPregunta.getQuestionsData(idNivel, idRonda)
-        if (!pregunta.isNullOrEmpty()){
-            val randomNumber = (pregunta.indices).random()
-            return pregunta[randomNumber]
-        }
-        return null
-    }
+    suspend operator fun invoke(idNivel: String, idRonda: String): List<Pregunta?> =
+        repoPregunta.getQuestionsData(idNivel, idRonda)
 }

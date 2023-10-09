@@ -31,6 +31,9 @@
             android:name="idRonda"
             app:argType="string"
             android:defaultValue="Guest" />
+        <action
+            android:id="@+id/action_singleGameFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
 
     <fragment

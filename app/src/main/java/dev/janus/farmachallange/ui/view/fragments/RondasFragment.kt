@@ -61,7 +61,6 @@ class RondasFragment : Fragment() {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Sin corazones")
             builder.setMessage("No quedan mas corazones, espera a que recarguen para poder jugar")
-
             // Agregar un botón de "Aceptar"
             builder.setPositiveButton("Aceptar") { dialog, which ->
                 // Acción a realizar al hacer clic en "Aceptar"

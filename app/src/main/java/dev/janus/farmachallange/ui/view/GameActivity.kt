@@ -1,14 +1,17 @@
 package dev.janus.farmachallange.ui.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
@@ -16,80 +19,110 @@ import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.databinding.ActivityGameBinding
 import dev.janus.farmachallange.ui.viewmodel.GameActivityViewModel
 import dev.janus.farmachallange.utils.UserManager
+import dev.janus.farmachallange.utils.clases.NetworkAvailable
+import dev.janus.farmachallange.utils.clases.Timer
 
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity() {
-    private var timeRemainingMillis = 10000
+
     private lateinit var binding: ActivityGameBinding
     private val viewModel: GameActivityViewModel by viewModels()
-    private var timer: CountDownTimer? = null
-
+    private lateinit var timer: Timer
+    private val networkAvailable: NetworkAvailable = NetworkAvailable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-      //  ocultarButtonNav()
-        // Configurar el NavController
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragmenttMenu) as NavHostFragment
-        val navController = navHostFragment.navController
+        if (networkAvailable.isNetworkAvailable(this)) {
+            timer = Timer(10000)
+            //  ocultarButtonNav()
+            // Configurar el NavController
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.navHostFragmenttMenu) as NavHostFragment
+            val navController = navHostFragment.navController
 
-        // Agregar un listener para detectar cambios en el destino del NavController
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            // Verificar si el fragmento actual debe ocultar el BottomNavigationView
-            if (destination.id == R.id.singleGameFragment) {
-                binding.navigationView.visibility = View.GONE
-            } else {
-                binding.navigationView.visibility = View.VISIBLE
-            }
-        }
-        binding.navigationView.selectedItemId = R.id.inicio
-        binding.navigationView.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.inicio -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.menuFragment)
-                R.id.perfil -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.profileFragment)
-                R.id.progreso -> binding.navHostFragmenttMenu.findNavController().navigate(R.id.progressFragment)
+            // Agregar un listener para detectar cambios en el destino del NavController
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                // Verificar si el fragmento actual debe ocultar el BottomNavigationView
+                if (destination.id == R.id.singleGameFragment) {
+                    binding.navigationView.visibility = View.GONE
+                } else {
+                    binding.navigationView.visibility = View.VISIBLE
+                }
             }
 
-            true
+            binding.navigationView.setOnItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.inicio -> binding.navHostFragmenttMenu.findNavController()
+                        .navigate(R.id.menuFragment)
+
+                    R.id.perfil -> binding.navHostFragmenttMenu.findNavController()
+                        .navigate(R.id.profileFragment)
+
+                    R.id.progreso -> binding.navHostFragmenttMenu.findNavController()
+                        .navigate(R.id.progressFragment)
+                }
+                true
+            }
+
+            observeUserData()
+        } else {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Sin conexion a la red")
+            builder.setPositiveButton("Aceptar") { _, _ ->
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("No se estableció conexión a internet")
+                builder.setPositiveButton("Aceptar") { _, _ ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish() // Si deseas cerrar la actividad actual
+                }
+                val alertDialog = builder.create()
+                alertDialog.show()
+
+            }
+            val alertDialog = builder.create()
+            alertDialog.show()
         }
 
-        observeUserData()
     }
-
 
 
     private fun observeUserData() {
         viewModel.fetchUser.observeForever { user ->
             updateUserInfo(user)
-            /* if (binding.tvCorazon.text.toString().toInt() < 12) {
-                 binding.tvTime.isVisible = true
-                 startTimer()
-             }*/
 
         }
     }
 
-    private fun startTimer() {
-        timer = object : CountDownTimer(timeRemainingMillis.toLong(), 1000) {
+    private fun startOrCancelTimer(corazones: Int) {
+        val isTimerVisible = corazones < 12
+        binding.tvTime.isVisible = isTimerVisible
 
-            override fun onTick(millisUntilFinished: Long) {
-                // Actualizar el tiempo restante en el TextView
-                val minutes = millisUntilFinished / 60000
-                val seconds = (millisUntilFinished % 60000) / 1000
-                binding.tvTime.text = "${String.format("%02d:%02d", minutes, seconds)}"
-            }
+        if (isTimerVisible) {
+            timer.startTempHearts(
+                onTick = { minutesRemaining, secondsRemaining ->
+                    updateTimerDisplay(minutesRemaining, secondsRemaining)
+                },
+                onFinish = {
+                    handleTimerFinish(corazones)
+                }
+            )
+        } else {
+            timer.cancelTem()
+            binding.tvTime.isVisible = false
+        }
+    }
 
-            override fun onFinish() {
-                if (UserManager.getInstanceUser().corazones < 12) {
-                    viewModel.updateHeats(UserManager.getInstanceUser().corazones + 1)
-                    // Reiniciar el temporizador
-                    timeRemainingMillis = 10000 // 2 minutos en milisegundos
-                    startTimer()
-                } else
-                    binding.tvTime.isVisible = false
-            }
-        }.start()
+    private fun updateTimerDisplay(minutesRemaining: Long, secondsRemaining: Long) {
+        binding.tvTime.text = String.format("%02d:%02d", minutesRemaining, secondsRemaining)
+    }
+
+    private fun handleTimerFinish(corazones: Int) {
+        val updatedCorazones = corazones + 1
+        viewModel.updateHeats(updatedCorazones)
+        startOrCancelTimer(updatedCorazones)
     }
 
     private fun updateUserInfo(user: Usuario?) {
