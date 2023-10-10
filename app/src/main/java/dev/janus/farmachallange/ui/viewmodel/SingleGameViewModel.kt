@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.janus.farmachallange.data.model.Pregunta
 import dev.janus.farmachallange.data.network.RepoEstadistica
 import dev.janus.farmachallange.domain.getQuestionDataUseCase
+import dev.janus.farmachallange.domain.setIncorrectAnswerUseCase
 import dev.janus.farmachallange.utils.UserManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SingleGameViewModel @Inject constructor(
     private val getQuestionDataUseCase: getQuestionDataUseCase,
+    private val setIncorrectAnswerUseCase: setIncorrectAnswerUseCase,
     private val repoStatus: RepoEstadistica
 ) : ViewModel() {
 
@@ -26,8 +28,6 @@ class SingleGameViewModel @Inject constructor(
     val isVisible: LiveData<Boolean> get() = _isVisible
     private val _numberquest = MutableLiveData<String>()
     val numberquest: LiveData<String> get() = _numberquest
-
-
 
 
     fun fetchQuestions(
@@ -60,12 +60,16 @@ class SingleGameViewModel @Inject constructor(
 
 
 
-fun updateHearts(hearts: Int) {
-    repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
+    fun updateHearts(hearts: Int) {
+        repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
 
-}
+    }
 
-fun updateCoins(coins: Int) {
-    repoStatus.uptdateCoins(UserManager.getInstanceUser().id, coins)
-}
+    fun updateCoins(coins: Int) {
+        repoStatus.uptdateCoins(UserManager.getInstanceUser().id, coins)
+    }
+
+    fun setWrongAnswer(nivel: Int, ronda: Int, numPregunta: Int, respuesta: String, pregunta: String){
+        setIncorrectAnswerUseCase(nivel, ronda, numPregunta, respuesta, pregunta)
+    }
 }

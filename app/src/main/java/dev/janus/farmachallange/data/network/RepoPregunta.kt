@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dev.janus.farmachallange.data.model.Nivel
 import dev.janus.farmachallange.data.model.Pregunta
 import dev.janus.farmachallange.data.model.Ronda
+import dev.janus.farmachallange.utils.UserManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -58,11 +59,23 @@ class RepoPregunta @Inject constructor(private val db: FirebaseFirestore) {
             } catch(e:Exception) {
                 emptyList()
             }
-
-        }
-
     }
 
+    fun setIncorrectAnswer(nivel: Int, ronda: Int, numPregunta: Int, respuesta: String, pregunta: String){
+        val question = hashMapOf(
+            "nivel" to nivel,
+            "ronda" to ronda,
+            "numPregunta" to numPregunta,
+            "respuesta" to respuesta,
+            "pregunta" to pregunta
+        )
+        db.collection("usuarios").document(UserManager.getInstanceUser().id)
+            .collection("preguntasIncorrectas")
+            .add(question).addOnSuccessListener {
 
+            }
+            .addOnFailureListener { e ->
 
-
+            }
+    }
+}

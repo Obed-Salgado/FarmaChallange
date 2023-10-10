@@ -16,6 +16,7 @@ class Timer(private val seconds: Long) {
         }
         timer.start()
     }
+
     fun startTempHearts(onTick: (Long, Long) -> Unit, onFinish: () -> Unit) {
         timer = object : CountDownTimer(seconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -32,8 +33,5 @@ class Timer(private val seconds: Long) {
 
     fun cancelTem() {
         timer.cancel()
-
     }
-
-
 }

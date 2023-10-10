@@ -1,15 +1,13 @@
 package dev.janus.farmachallange.ui.view.fragments
 
+import android.app.Application
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,7 +20,6 @@ import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentSingleGameBinding
 import dev.janus.farmachallange.ui.view.dialog.EvaluationDialog
 import dev.janus.farmachallange.ui.viewmodel.SingleGameViewModel
-import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.Timer
 
@@ -43,7 +40,6 @@ class SingleGameFragment() : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -52,9 +48,6 @@ class SingleGameFragment() : Fragment() {
     ): View {
         _binding = FragmentSingleGameBinding.inflate(inflater, container, false)
         return binding.root
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,7 +85,6 @@ class SingleGameFragment() : Fragment() {
             } else
                 overCoins()
         }
-
     }
 
     //Este metodo sirve para que el usuario no pueda regresar al fragmento anterior por medio de la navegacion del dispositivo.
@@ -164,7 +156,8 @@ class SingleGameFragment() : Fragment() {
                 butonRes.background =
                     requireContext().getDrawable(R.drawable.background_button_incorect)
                 buscarRespuesta()
-
+                val nivel = idNivel.removeRange(0, idNivel.length - 1)
+                viewModel.setWrongAnswer(nivel.toInt(), idRonda.toInt(), pregunta, butonRes.text.toString(), binding.tvPregunta.text.toString())
                 viewModel.updateHearts(UserManager.getInstanceUser().corazones - 1)
             }
         } else overHerts()
@@ -191,7 +184,7 @@ class SingleGameFragment() : Fragment() {
         }
     }
 
-    private fun showOverRodna() {
+    private fun showOverRonda() {
         timer.cancelTem()
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Ronda Terminada")
@@ -208,7 +201,7 @@ class SingleGameFragment() : Fragment() {
 
     private fun actualizarInterfaz() {
         pregunta++
-        viewModel.fetchQuestions(idNivel, idRonda, pregunta) { showOverRodna() }
+        viewModel.fetchQuestions(idNivel, idRonda, pregunta) { showOverRonda() }
         viewModel.pregunta.observe(viewLifecycleOwner, Observer { pregunta ->
             try {
                 binding.tvPregunta.text = pregunta.pregunta

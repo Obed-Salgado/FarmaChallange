@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-
 import dev.janus.farmachallange.data.network.RepoEstadistica
 import dev.janus.farmachallange.domain.GetUserUseCase
 import dev.janus.farmachallange.utils.UserManager

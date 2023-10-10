@@ -55,9 +55,10 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:inputType="textEmailAddress"
+                android:text="obed@gmail.com" />
 
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -71,11 +72,14 @@
             app:layout_constraintStart_toStartOf="@+id/tillEmail"
             app:layout_constraintTop_toBottomOf="@+id/tillEmail"
             app:passwordToggleEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:text="123456"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView

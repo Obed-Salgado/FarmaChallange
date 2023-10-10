@@ -3,7 +3,6 @@ package dev.janus.farmachallange.ui.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -29,6 +28,7 @@ class GameActivity : AppCompatActivity() {
     private val viewModel: GameActivityViewModel by viewModels()
     private lateinit var timer: Timer
     private val networkAvailable: NetworkAvailable = NetworkAvailable()
+    private var corazones = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,21 +85,20 @@ class GameActivity : AppCompatActivity() {
             val alertDialog = builder.create()
             alertDialog.show()
         }
-
+        startOrCancelTimer()
     }
 
 
     private fun observeUserData() {
         viewModel.fetchUser.observeForever { user ->
+            corazones = user.corazones
             updateUserInfo(user)
-
         }
     }
 
-    private fun startOrCancelTimer(corazones: Int) {
-        val isTimerVisible = corazones < 12
+    private fun startOrCancelTimer() {
+        val isTimerVisible = corazones < 11
         binding.tvTime.isVisible = isTimerVisible
-
         if (isTimerVisible) {
             timer.startTempHearts(
                 onTick = { minutesRemaining, secondsRemaining ->
@@ -122,7 +121,8 @@ class GameActivity : AppCompatActivity() {
     private fun handleTimerFinish(corazones: Int) {
         val updatedCorazones = corazones + 1
         viewModel.updateHeats(updatedCorazones)
-        startOrCancelTimer(updatedCorazones)
+        //binding.tvCorazon.text = user.corazones.toString()
+        startOrCancelTimer()
     }
 
     private fun updateUserInfo(user: Usuario?) {
@@ -136,7 +136,5 @@ class GameActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "No hay datos de usuario", Toast.LENGTH_SHORT).show()
         }
-
     }
-
 }
