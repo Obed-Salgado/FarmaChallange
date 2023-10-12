@@ -12,6 +12,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.core.ActivityScope
+import com.google.firebase.inject.Deferred
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.Usuario
@@ -20,6 +22,7 @@ import dev.janus.farmachallange.ui.viewmodel.GameActivityViewModel
 import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.clases.Timer
+import kotlinx.coroutines.Dispatchers
 
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity() {
@@ -28,7 +31,6 @@ class GameActivity : AppCompatActivity() {
     private val viewModel: GameActivityViewModel by viewModels()
     private lateinit var timer: Timer
     private val networkAvailable: NetworkAvailable = NetworkAvailable()
-    private var corazones = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,19 +87,18 @@ class GameActivity : AppCompatActivity() {
             val alertDialog = builder.create()
             alertDialog.show()
         }
-        startOrCancelTimer()
     }
 
 
     private fun observeUserData() {
         viewModel.fetchUser.observeForever { user ->
-            corazones = user.corazones
             updateUserInfo(user)
+            startOrCancelTimer(user.corazones)
         }
     }
 
-    private fun startOrCancelTimer() {
-        val isTimerVisible = corazones < 11
+    private fun startOrCancelTimer(corazones: Int) {
+        val isTimerVisible = corazones < 12
         binding.tvTime.isVisible = isTimerVisible
         if (isTimerVisible) {
             timer.startTempHearts(
@@ -109,7 +110,6 @@ class GameActivity : AppCompatActivity() {
                 }
             )
         } else {
-            timer.cancelTem()
             binding.tvTime.isVisible = false
         }
     }
@@ -121,8 +121,6 @@ class GameActivity : AppCompatActivity() {
     private fun handleTimerFinish(corazones: Int) {
         val updatedCorazones = corazones + 1
         viewModel.updateHeats(updatedCorazones)
-        //binding.tvCorazon.text = user.corazones.toString()
-        startOrCancelTimer()
     }
 
     private fun updateUserInfo(user: Usuario?) {

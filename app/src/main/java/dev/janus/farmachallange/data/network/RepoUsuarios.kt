@@ -91,7 +91,7 @@ class RepoUsuarios @Inject constructor(
 
      suspend fun getUserData(idUser: String?): Flow<Usuario> = callbackFlow {
         val eventDocument = db.collection("usuarios").document(idUser!!)
-        val suscripcion = eventDocument.addSnapshotListener{documentSnapshot, firebaseFirestoreException ->
+        val suscripcion = eventDocument.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if (documentSnapshot!!.exists()){
                 val user = documentSnapshot.toObject(Usuario::class.java)
                 user!!.id = documentSnapshot.id
