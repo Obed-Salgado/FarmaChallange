@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentSingleGameBinding
 import dev.janus.farmachallange.ui.view.dialog.EvaluationDialog
+import dev.janus.farmachallange.ui.view.dialog.ResultadosDialog
 import dev.janus.farmachallange.ui.viewmodel.SingleGameViewModel
 import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.Timer
@@ -37,6 +38,9 @@ class SingleGameFragment() : Fragment() {
     private lateinit var idRonda: String
     private var pregunta: Int = 0
     private lateinit var timer: Timer
+    private var distractorClicks: Int = 0
+    private  var correctAnswer:Int = 0
+    private  var incorrectAnswer:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +83,7 @@ class SingleGameFragment() : Fragment() {
         }
 
         binding.btnHelp.setOnClickListener {
-            if (UserManager.getInstanceUser().monedas != 0) {
+            if (UserManager.getInstanceUser().monedas != 0 && distractorClicks < 2) {
                 viewModel.updateCoins(UserManager.getInstanceUser().monedas - 5)
                 deleteDistractor()
             } else
@@ -143,15 +147,19 @@ class SingleGameFragment() : Fragment() {
     }
 
     fun evaluarPregunta(butonRes: Button) {
-        //Respuesta correcta
+
         if (UserManager.getInstanceUser().corazones != 0) {
             timer.cancelTem()
             if (butonRes.text == respuestaOk) {
+                //Respuesta correcta
+                correctAnswer++
                 butonRes.background =
                     requireContext().getDrawable(R.drawable.background_button_corect)
                 showDialog("correct")
                 viewModel.updateCoins(UserManager.getInstanceUser().monedas + 5)
             } else {
+                //Respuesta Correcta
+                incorrectAnswer++
                 showDialog("incorrecto")
                 butonRes.background =
                     requireContext().getDrawable(R.drawable.background_button_incorect)
@@ -165,14 +173,16 @@ class SingleGameFragment() : Fragment() {
 
 
     private fun deleteDistractor() {
-        val indicesDistractores = buttonList.indices.filter { buttonIndex ->
-            buttonList[buttonIndex].text != respuestaOk
+        distractorClicks++
+        val distractorButtons = buttonList.filter { it.text != respuestaOk }
+        if (distractorButtons.isNotEmpty()) {
+            val randomDistractor = distractorButtons.random()
+            randomDistractor.isVisible = false // Oculta el botón distractor
         }
-        if (indicesDistractores.isNotEmpty()) {
-            val indiceAleatorio = indicesDistractores.random()
-            buttonList[indiceAleatorio].isVisible = false // Oculta el botón distractor
-        }
+
+
     }
+
 
     private fun buscarRespuesta() {
         for (i in buttonList.indices) {
@@ -186,17 +196,12 @@ class SingleGameFragment() : Fragment() {
 
     private fun showOverRonda() {
         timer.cancelTem()
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Ronda Terminada")
-        builder.setMessage("La ronda ha finalizado")
-        builder.setPositiveButton("Aceptar") { _, _ ->
-            findNavController().navigate(R.id.action_singleGameFragment_to_menuFragment)
-            onDestroy()
-
-        }
-        val alertDialog = builder.create()
-        alertDialog.show()
+        val dialog = ResultadosDialog(correctAnswer, incorrectAnswer){goToHome()}
+        dialog.show(childFragmentManager, "ResultadosDialog")
     }
+
+    private fun goToHome() = findNavController().navigate(R.id.action_singleGameFragment_to_menuFragment)
+
 
 
     private fun actualizarInterfaz() {
