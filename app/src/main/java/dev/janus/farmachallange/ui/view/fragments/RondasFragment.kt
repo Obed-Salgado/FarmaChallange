@@ -12,9 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import dev.janus.farmachallange.R
 import dev.janus.farmachallange.databinding.FragmentRondasBinding
-import dev.janus.farmachallange.ui.view.adapters.ListLevelAdapter
 import dev.janus.farmachallange.ui.view.adapters.RondaListAdapter
 import dev.janus.farmachallange.ui.viewmodel.RondasViewModel
 import dev.janus.farmachallange.utils.UserManager
@@ -27,9 +25,6 @@ class RondasFragment : Fragment() {
     private lateinit var adapter:RondaListAdapter
     val args:RondasFragmentArgs by navArgs()
     private lateinit var idNivel:String
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +48,7 @@ class RondasFragment : Fragment() {
             binding.rvRondas.layoutManager = LinearLayoutManager(requireContext())
         })
     }
+
     fun goToGameFragment(idRonda:String){
         if (UserManager.getInstanceUser().corazones != 0){
             findNavController().navigate(RondasFragmentDirections.actionRondasFragmentToSingleGameFragment(idNivel,idRonda))
@@ -66,14 +62,11 @@ class RondasFragment : Fragment() {
                 // Acción a realizar al hacer clic en "Aceptar"
                 dialog.dismiss()
             }
-
             val dialog = builder.create()
             dialog.show()
         }
-        }
-
-
     }
+}
 
 
 

@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 import javax.inject.Inject
 
-class GetUserUseCase @Inject constructor(private val repoUsuarios: RepoUsuarios) {
+class GetUserDataUseCase @Inject constructor(private val repoUsuarios: RepoUsuarios) {
     suspend operator fun invoke():Flow<Usuario> = repoUsuarios.getUserData(UserManager.getInstanceUser().id)
 }

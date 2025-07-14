@@ -4,44 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardCornerRadius="8dp"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="10dp"
     android:id="@+id/cvLevel"
-    app:cardElevation="8dp">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/level_background"
-        android:gravity="center"
-        android:orientation="vertical">
-
+    app:cardElevation="1dp">
+<!--        android:background="#2E3195" -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="153dp"
-            android:layout_height="99dp"
-            android:layout_margin="20dp"
-            android:layout_marginTop="36dp"
-            android:background="@drawable/background_question"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:background="#F8F8F8"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/ivIconLevel"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/userlog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvNameLevel"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/azul"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Conceptos Generales de la farmacologia" />
+                app:layout_constraintTop_toBottomOf="@id/ivIconLevel"
+                tools:text="Sistema nervioso autónomo" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

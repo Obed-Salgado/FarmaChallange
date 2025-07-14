@@ -2,90 +2,113 @@ package dev.janus.farmachallange.data.network
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dev.janus.farmachallange.data.model.ResponseState
+import dev.janus.farmachallange.data.model.UserRegister
 import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.utils.UserManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.coroutines.resume
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class RepoUsuarios @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore
 ) {
 
-    fun registerUser(
-        nombre: String,
-        usuario: String,
-        matricula: String,
-        email: String,
-        password: String,
-        urlIcon: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        checkIfUserExists(usuario, email) { userExists ->
-            if (userExists) {
-                onFailure("El nombre de usuario o correo electrónico ya están en uso.")
-            } else {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val user = auth.currentUser
-                            val userId = user?.uid
-                            if (userId != null) {
-                                val userDoc = db.collection("usuarios").document(userId)
-                                val userData = hashMapOf(
-                                    "nombre" to nombre,
-                                    "usuario" to usuario,
-                                    "matricula" to matricula,
-                                    "email" to email,
-                                    "corazones" to 5,
-                                    "monedas" to 0,
-                                    "urlIcon" to urlIcon
-                                )
-                                userDoc.set(userData)
-                                    .addOnSuccessListener {
-                                        // Usuario creado exitosamente
-                                        onSuccess()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        onFailure(e.message ?: "Error desconocido")
-                                    }
-                            } else {
-                                onFailure("Error al obtener el ID de usuario.")
-                            }
+    suspend fun registerUser(
+        userInfo: UserRegister
+    ): ResponseState {
+        return withContext(Dispatchers.IO){
+            try {
+                suspendCoroutine<ResponseState> { continuation ->
+                    checkIfUserExists(userInfo.userName, userInfo.email) { userExists ->
+                        if (userExists) {
+                            continuation.resume(ResponseState.Error("El nombre de usuario o correo electrónico ya están en uso."))
                         } else {
-                            onFailure(task.exception?.message ?: "Error desconocido")
+                            auth.createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val user = auth.currentUser
+                                        val userId = user?.uid
+                                        if (userId != null) {
+                                            val userDoc = db.collection("usuarios").document(userId)
+                                            val userData = hashMapOf(
+                                                "nombre" to userInfo.name,
+                                                "usuario" to userInfo.userName,
+                                                "matricula" to userInfo.tuition,
+                                                "email" to userInfo.email,
+                                                "corazones" to 5,
+                                                "monedas" to 0,
+                                                "urlIcon" to userInfo.urlIcon
+                                            )
+                                            userDoc.set(userData)
+                                                .addOnSuccessListener {
+                                                    // Usuario creado exitosamente
+                                                    continuation.resume(ResponseState.Success("Usuario creado exitosamente"))
+                                                }
+                                                .addOnFailureListener { exception ->
+                                                    continuation.resumeWithException(exception)
+                                                }
+                                        }
+                                    }
+                                }.addOnFailureListener { exception ->
+                                    continuation.resumeWithException(exception)
+                                }
                         }
                     }
+                }
+            } catch (e: Exception){
+                val message = when(e.message){
+                    "We have blocked all requests from this device due to unusual activity. Try again later." ->
+                        "Usuario bloqueado temporalmente por exceso de intentos"
+                    else ->
+                        "Error inesperado"
+                }
+                ResponseState.Error(message)
             }
         }
     }
 
-    fun loginUser(
-        email: String,
-        password: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    val userId = user?.uid
 
-                    if (userId != null) {
-                        UserManager.setUser(Usuario())
-                        UserManager.setUserId(userId)
-                        onSuccess()
-                    } else {
-                        onFailure("Error al obtener el ID de usuario.")
-                    }
-                } else {
-                    onFailure("¡Correo o Contraseña incorrecto!")
+    suspend fun loginUser(
+        email: String,
+        password: String
+    ): ResponseState {
+        return withContext(Dispatchers.IO){
+            try {
+                suspendCoroutine<ResponseState> { continuation ->
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val userId = auth.currentUser?.uid
+                                if (userId != null) {
+                                    UserManager.setUser(Usuario())
+                                    UserManager.setUserId(userId)
+                                    continuation.resume(ResponseState.Success(""))
+                                }
+                            }
+                        }.addOnFailureListener { exception ->
+                            continuation.resumeWithException(exception)
+                        }
                 }
+            } catch (e: Exception){
+                val message = when(e.message){
+                    "We have blocked all requests from this device due to unusual activity. Try again later." ->
+                        "Usuario bloqueado temporalmente por exceso de intentos"
+                    "An internal error has occurred. [ INVALID_LOGIN_CREDENTIALS ]" ->
+                        "¡Correo o Contraseña incorrecto!"
+                    else ->
+                        "Error inesperado"
+                }
+                ResponseState.Error(message)
             }
+        }
     }
 
 

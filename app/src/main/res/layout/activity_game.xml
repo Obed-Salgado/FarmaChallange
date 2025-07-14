@@ -10,9 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintStatus"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:paddingVertical="5dp"
-        android:paddingHorizontal="10dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:background="@color/backgroundDetails"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -27,8 +26,7 @@
             android:src="@drawable/corazon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tvCorazon"
@@ -48,12 +46,12 @@
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
             android:text="0:00"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/tvCorazon"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="10sp"/>
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
 
 
@@ -132,16 +130,16 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintStatus"
         app:navGraph="@navigation/navigation_menu"/>
 
+<!--    "@style/Widget.Design.BottomNavigationView"-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        style="@style/Widget.Design.BottomNavigationView"
         android:id="@+id/navigationView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/backgroundDetails"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-
         app:menu="@menu/botton_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

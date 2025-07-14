@@ -71,40 +71,50 @@
         app:layout_constraintTop_toBottomOf="@id/tvMatricula"
         tools:text="Id de grupo: dinamita" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="50dp"
-        android:background="@drawable/rvlogros"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.432"
+    <LinearLayout
+        android:id="@+id/llGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvIdGurpo">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvIdGurpo"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:backgroundTint="#000000"
+            android:background="?android:attr/listDivider"
+            tools:layout_editor_absoluteX="1dp" />
 
         <TextView
             android:id="@+id/tvLogro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="Logros"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginHorizontal="10dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.16" />.
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:backgroundTint="#000000"
+            android:background="?android:attr/listDivider"
+            tools:layout_editor_absoluteX="1dp" />
 
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llGroup"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

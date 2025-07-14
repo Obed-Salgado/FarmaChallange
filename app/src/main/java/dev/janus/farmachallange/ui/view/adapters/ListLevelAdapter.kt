@@ -7,8 +7,11 @@ import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.Nivel
 import dev.janus.farmachallange.databinding.ItemLevelBinding
 
-class ListLevelAdapter(private val level: List<Nivel>, private val selectNivel:(String)->Unit) :
-    RecyclerView.Adapter<ListLevelViewHolder>() {
+class ListLevelAdapter(
+    private val level: List<Nivel>,
+    private val selectLevel: (String) -> Unit
+) : RecyclerView.Adapter<ListLevelViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListLevelViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_level, parent, false)
@@ -20,6 +23,6 @@ class ListLevelAdapter(private val level: List<Nivel>, private val selectNivel:(
 
     override fun onBindViewHolder(holder: ListLevelViewHolder, position: Int) {
         val item = level[position]
-        holder.bind(item, selectNivel)
+        holder.bind(item, selectLevel)
     }
 }

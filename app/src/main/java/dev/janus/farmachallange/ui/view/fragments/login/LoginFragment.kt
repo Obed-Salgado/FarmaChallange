@@ -3,13 +3,12 @@ package dev.janus.farmachallange.ui.view.fragments.login
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
@@ -38,41 +37,35 @@ class LoginFragment : Fragment() {
             if (TextUtils.isEmpty(binding.etEmail.getText()) || TextUtils.isEmpty(binding.etPassword.getText())) {
                 binding.tvFailure.text = "Se requiere ingresar un correo y una corntraseña"
                 binding.tvFailure.isVisible = true
-            }else{
-                showShimmer()
-                viewModel.setUserData(binding.etEmail.text.toString(),
-                    binding.etPassword.text.toString(),
-                    onSuccess = {
-                        val intent = Intent(getActivity(), GameActivity::class.java)
-                        startActivity(intent)
-                        hidenShimmer()
-                        requireActivity().finish()
+            }else
+                viewModel.setUserData(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
-                    },
-                    onFailure = { errorMessage ->
-                        binding.tvFailure.text = errorMessage
-                        binding.tvFailure.isVisible = true
-                        hidenShimmer()
-                    })
-            }
         }
 
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
+
+        viewModel.showLottie.observe(viewLifecycleOwner){
+            showShimmer(it)
+        }
+
+        viewModel.successMessage.observe(viewLifecycleOwner){
+            val intent = Intent(requireContext(), GameActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner){
+            binding.tvFailure.text = it
+            binding.tvFailure.isVisible = true
+        }
     }
 
-    private fun showShimmer() {
-        binding.viewLoading.isVisible = true
-        binding.constraintData.isVisible = false
-        binding.btnRegister.isVisible = false
-        binding.btnLoguear.isVisible = false
-    }
-
-    private fun hidenShimmer() {
-        binding.viewLoading.isVisible = false
-        binding.constraintData.isVisible = true
-        binding.btnRegister.isVisible = true
-        binding.btnLoguear.isVisible = true
+    private fun showShimmer(show: Boolean) {
+        binding.viewLoading.isVisible = show
+        binding.constraintData.isVisible = !show
+        binding.btnRegister.isVisible = !show
+        binding.btnLoguear.isVisible = !show
     }
 }

@@ -3,7 +3,9 @@ package dev.janus.farmachallange.utils.clases
 import android.os.CountDownTimer
 
 class Timer(private val seconds: Long) {
-    private lateinit var timer: CountDownTimer
+
+    private var timer: CountDownTimer? = null
+
     fun startTemp(onTick: (Long) -> Unit, onFinish: () -> Unit) {
         timer = object : CountDownTimer(seconds, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -12,9 +14,10 @@ class Timer(private val seconds: Long) {
             }
             override fun onFinish() {
                 onFinish()
+                timer = null
             }
         }
-        timer.start()
+        timer?.start()
     }
 
     fun startTempHearts(onTick: (Long, Long) -> Unit, onFinish: () -> Unit) {
@@ -26,12 +29,18 @@ class Timer(private val seconds: Long) {
             }
             override fun onFinish() {
                 onFinish()
+                timer = null
             }
         }
-        timer.start()
+        timer?.start()
     }
 
+    fun isTimerInProgress(): Boolean = timer != null
+
     fun cancelTem() {
-        timer.cancel()
+        timer.let {
+            timer?.cancel()
+            //CHECAR si puedo asignarle null
+        }
     }
 }

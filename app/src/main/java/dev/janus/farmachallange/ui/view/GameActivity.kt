@@ -10,19 +10,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.core.ActivityScope
-import com.google.firebase.inject.Deferred
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.databinding.ActivityGameBinding
 import dev.janus.farmachallange.ui.viewmodel.GameActivityViewModel
-import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.clases.Timer
-import kotlinx.coroutines.Dispatchers
 
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity() {
@@ -53,6 +48,8 @@ class GameActivity : AppCompatActivity() {
                     binding.navigationView.visibility = View.VISIBLE
                 }
             }
+
+            binding.navigationView.selectedItemId = R.id.inicio
 
             binding.navigationView.setOnItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
@@ -88,7 +85,6 @@ class GameActivity : AppCompatActivity() {
             alertDialog.show()
         }
     }
-
 
     private fun observeUserData() {
         viewModel.fetchUser.observeForever { user ->

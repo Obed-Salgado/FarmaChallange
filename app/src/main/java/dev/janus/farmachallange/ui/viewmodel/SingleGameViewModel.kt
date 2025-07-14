@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.janus.farmachallange.data.model.Pregunta
 import dev.janus.farmachallange.data.network.RepoEstadistica
-import dev.janus.farmachallange.domain.getQuestionDataUseCase
+import dev.janus.farmachallange.domain.GetQuestionDataUseCase
 import dev.janus.farmachallange.domain.setIncorrectAnswerUseCase
 import dev.janus.farmachallange.utils.UserManager
 import kotlinx.coroutines.launch
@@ -15,54 +15,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SingleGameViewModel @Inject constructor(
-    private val getQuestionDataUseCase: getQuestionDataUseCase,
+    private val getQuestionDataUseCase: GetQuestionDataUseCase,
     private val setIncorrectAnswerUseCase: setIncorrectAnswerUseCase,
     private val repoStatus: RepoEstadistica
 ) : ViewModel() {
 
-    private val _pregunta = MutableLiveData<Pregunta>()
-    val pregunta: LiveData<Pregunta> get() = _pregunta
-    private val preguntasYaSeleccionadas =
-        mutableListOf<Pregunta>() // Lista para almacenar preguntas ya seleccionadas
-    private val _isVisible = MutableLiveData<Boolean>()
-    val isVisible: LiveData<Boolean> get() = _isVisible
+    private val _question = MutableLiveData<Pregunta>()
+    val question: LiveData<Pregunta> get() = _question
+    private val _questions = MutableLiveData<List<Pregunta>>()
+    private val _numberOfQuestions = MutableLiveData<Int>()
+    val numberOfQuestions: LiveData<Int>get() = _numberOfQuestions
     private val _numberquest = MutableLiveData<String>()
     val numberquest: LiveData<String> get() = _numberquest
+    private val _finishGame = MutableLiveData<Boolean>()
+    val finishGame: LiveData<Boolean> get() = _finishGame
 
-
-    fun fetchQuestions(
-        idNivel: String,
-        idRonda: String,
-        currentIndex: Int,
-        overRonda: () -> Unit
-    ) {
+    fun getAllQuestions(idNivel: String, idRonda: String){
         viewModelScope.launch {
-            _isVisible.postValue(true)
-            val preguntaList = getQuestionDataUseCase(idNivel, idRonda)
-            if (currentIndex >= 0 && currentIndex < preguntaList.size) {
-                var preguntaActual = preguntaList[currentIndex]
-                // Verificar si la pregunta ya se seleccionó previamente
-                while (preguntasYaSeleccionadas.contains(preguntaActual)) {
-                    preguntaActual = preguntaList.random()
-                }
+            val temp = getQuestionDataUseCase.invoke(idNivel, idRonda).shuffled()
+            _questions.value = temp
+            _numberOfQuestions.value = _questions.value?.size ?: 0
+        }
+    }
 
-                preguntasYaSeleccionadas.add(preguntaActual!!) // Agregar la pregunta actual a la lista de preguntas ya seleccionadas
-                _isVisible.postValue(false)
-                _numberquest.postValue("${currentIndex}/${preguntaList.size}")
-                _pregunta.postValue(preguntaActual!!)
-            } else if (currentIndex == preguntaList.size) {
-                _isVisible.postValue(false)
-                _numberquest.postValue("${currentIndex}/${preguntaList.size}")
-                overRonda()
+    fun getQuestion(progressQuestions: Int){
+        viewModelScope.launch {
+            if(_questions.value?.isNotEmpty() == true) {
+                val temp = _questions.value?.last() ?: Pregunta()
+                _question.postValue(temp)
+                _questions.value = _questions.value?.subList(0, (_questions.value?.size ?: 1) - 1)
+                _numberquest.postValue("${progressQuestions}/${numberOfQuestions.value}")
+            } else {
+                _numberquest.postValue("${progressQuestions}/${numberOfQuestions.value}")
+                _finishGame.value = true
             }
         }
     }
 
-
-
     fun updateHearts(hearts: Int) {
         repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
-
     }
 
     fun updateCoins(coins: Int) {

@@ -1,20 +1,21 @@
 package dev.janus.farmachallange.ui.view.fragments.login
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
+import dev.janus.farmachallange.data.model.InputsError
+import dev.janus.farmachallange.data.model.UserRegister
 import dev.janus.farmachallange.databinding.FragmentRegisterBinding
+import dev.janus.farmachallange.ui.view.dialog.ErrorDialog
+import dev.janus.farmachallange.ui.view.dialog.SuccessDialog
 import dev.janus.farmachallange.ui.view.dialog.UserIconDialog
 import dev.janus.farmachallange.ui.viewmodel.RegisterViewModel
 
@@ -26,7 +27,7 @@ class RegisterFragment : Fragment() {
     private val viewModel: RegisterViewModel by lazy {
         ViewModelProvider(this).get(RegisterViewModel::class.java)
     }
-    private var urlIcon = "https://firebasestorage.googleapis.com/v0/b/farmachallange1.appspot.com/o/avatarnaranjaM.png?alt=media&token=1fc55420-db3e-443e-b6ac-795926e06196"
+    private var urlIcon = "" //https://firebasestorage.googleapis.com/v0/b/farmachallange1.appspot.com/o/avatarnaranjaM.png?alt=media&token=1fc55420-db3e-443e-b6ac-795926e06196
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,35 +40,43 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-        }
+        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
         binding.btnRegister.setOnClickListener {
-            showShimmer()
-            viewModel.setUserData(
+            val user = UserRegister(
                 binding.etNombre.text.toString(),
                 binding.etUser.text.toString(),
                 binding.etMatricula.text.toString(),
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString(),
                 urlIcon,
-                onSuccess = {
-                    Toast.makeText(requireContext(), "Usuario Guardado", Toast.LENGTH_SHORT).show()
-                    hidenShimmer()
-                },
-                onFailure = {errorMessage ->
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-                }
             )
-            limpiarTexto()
+            viewModel.setUserData(user)
         }
 
         binding.ivIcon.setOnClickListener {
-            val dialogUserIconBinding = UserIconDialog( selectIcon ={ url ->
-                selectIcon(url)
-            } )
+            val dialogUserIconBinding = UserIconDialog { url -> selectIcon(url) }
             dialogUserIconBinding.show(parentFragmentManager, "UserIconDialog")
+        }
+
+        viewModel.showLottie.observe(viewLifecycleOwner){
+            showShimmer(it)
+        }
+
+        viewModel.successMessage.observe(viewLifecycleOwner){
+            SuccessDialog(it){
+                binding.btnBack.performClick()
+            }.show(parentFragmentManager, "SuccessDialog")
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner){
+            ErrorDialog(it){
+                binding.btnBack.performClick()
+            }.show(parentFragmentManager, "ErrorDialog")
+        }
+
+        viewModel.errorInputs.observe(viewLifecycleOwner){
+            showErrorText(it)
         }
     }
 
@@ -78,23 +87,28 @@ class RegisterFragment : Fragment() {
         urlIcon = url
     }
 
-    private fun showShimmer(){
-        binding.viewLoading.isVisible = true
-        binding.constraintRegister.isVisible = false
-        binding.btnRegister.isVisible = false
-    }
-    private fun hidenShimmer(){
-        binding.viewLoading.isVisible = false
-        binding.constraintRegister.isVisible = true
-        binding.btnRegister.isVisible = true
+    private fun showShimmer(show: Boolean){
+        binding.viewLoading.isVisible = show
+        binding.constraintRegister.isVisible = !show
+        binding.btnRegister.isVisible = !show
     }
 
-    private fun limpiarTexto() {
+    private fun showErrorText(error: InputsError){
+        binding.tvNameError.text = if(error.nameError) "Error en nombre" else ""
+        binding.tvUserNameError.text = if(error.userNameError) "Error en nombre usuario" else ""
+        binding.tvTuitionError.text = if(error.tuitionError) "Error en matrícula" else ""
+        binding.tvEmailError.text = if(error.emailError) "Error en correo" else ""
+        binding.tvPasswordError.text = if(error.passwordError) "Error en contraseña" else ""
+        binding.tvIconError.text = if(error.urlIconError) "Seleccionar icono" else ""
+    }
+
+    private fun clearInputs() {
         binding.etNombre.setText("")
         binding.etUser.setText("")
         binding.etMatricula.setText("")
         binding.etEmail.setText("")
         binding.etPassword.setText("")
+        urlIcon = ""
         binding.ivIcon.setImageResource(R.drawable.userlog)
     }
 }

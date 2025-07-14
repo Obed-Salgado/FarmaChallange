@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.janus.farmachallange.data.model.Pregunta
 import dev.janus.farmachallange.data.model.Ronda
 import dev.janus.farmachallange.domain.GetRondaUseCase
-import dev.janus.farmachallange.domain.getQuestionDataUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class RondasViewModel @Inject constructor(private val getRondaUseCase: GetRondaUseCase) :ViewModel() {
 
