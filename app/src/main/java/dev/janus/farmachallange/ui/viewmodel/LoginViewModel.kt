@@ -22,6 +22,7 @@ class LoginViewModel @Inject constructor(private val login: LoginUseCase) : View
 
     fun setUserData(email:String, password: String) {
         viewModelScope.launch {
+            _showLottie.postValue(true)
             when(val response = login(email, password)){
                 is ResponseState.Error -> {
                     _errorMessage.value = response.message

@@ -13,7 +13,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="150dp"
-            android:background="#F8F8F8"
+            android:background="#2E3195"
             android:padding="10dp">
 
             <ImageView
@@ -31,7 +31,7 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textColor="@color/azul"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

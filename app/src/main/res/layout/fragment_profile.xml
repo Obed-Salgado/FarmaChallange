@@ -110,8 +110,12 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAchievement"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        tools:listitem="@layout/item_achievement"
+        tools:itemCount="3"
+        android:paddingHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
