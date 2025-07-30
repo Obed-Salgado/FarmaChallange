@@ -22,8 +22,8 @@ class ResultadosDialog(val correct:Int, val incorrect:Int, val onClick:()->Unit)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        binding.tvShowCorrect.text = "$correct"
-        binding.tvShowIncorrect.text = "$incorrect"
+        binding.tvShowCorrect.text = "$correct aciertos"
+        binding.tvShowIncorrect.text = "$incorrect fallas"
         binding.btnContinuar.setOnClickListener {onClick()}
         isCancelable = false
     }

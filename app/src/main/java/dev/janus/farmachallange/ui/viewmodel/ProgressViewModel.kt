@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProgressViewModel @Inject constructor(private val getProgress: GetProgressUseCase, private val getLevelUseCase: GetLevelUseCase): ViewModel() {
+class ProgressViewModel @Inject constructor(
+    private val getProgress: GetProgressUseCase,
+    private val getLevelUseCase: GetLevelUseCase
+): ViewModel() {
 
     private val _showLottie = MutableLiveData<Boolean>()
     val showLottie: LiveData<Boolean> get() = _showLottie
@@ -23,7 +26,7 @@ class ProgressViewModel @Inject constructor(private val getProgress: GetProgress
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
-    fun getLevelsProgress(levels: List<Nivel>){
+    fun getLevelsProgress(){
         viewModelScope.launch {
             _showLottie.postValue(true)
             when(val response = getProgress(getLevelUseCase())){

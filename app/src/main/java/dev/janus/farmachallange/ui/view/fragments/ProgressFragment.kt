@@ -33,7 +33,7 @@ class ProgressFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
 
-        viewModel.getLevelsProgress(emptyList())
+        viewModel.getLevelsProgress()
 
         viewModel.progress.observe(viewLifecycleOwner){
             setUpRecyclerView(it)

@@ -14,6 +14,7 @@ import dev.janus.farmachallange.databinding.FragmentProfileBinding
 import dev.janus.farmachallange.ui.view.adapters.AchievementAdapter
 import dev.janus.farmachallange.ui.viewmodel.MenuViewModel
 import dev.janus.farmachallange.utils.UserManager
+import dev.janus.farmachallange.utils.clases.provideList
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -34,21 +35,21 @@ class ProfileFragment : Fragment() {
         setUpInfoUser()
         onBackPressed()
 
-        viewModel.nameLevel.observe(viewLifecycleOwner){
-            setUpRecyclerView(it)
-        }
+//        viewModel.nameLevel.observe(viewLifecycleOwner){
+//            setUpRecyclerView(it)
+//        }
+
+        setUpRecyclerView(provideList())
     }
 
     private fun setUpInfoUser(){
         binding.tvName.text = UserManager.getInstanceUser().nombre
         binding.tvEmail.text = UserManager.getInstanceUser().email
-        binding.tvMatricula.text = "Matricula: ${UserManager.getInstanceUser().matricula}"
+        binding.tvMatricula.text = UserManager.getInstanceUser().matricula
     }
 
     private fun setUpRecyclerView(achievement: List<Nivel>){
-        binding.rvAchievement.adapter = AchievementAdapter(achievement) {
-
-        }
+        binding.rvAchievement.adapter = AchievementAdapter(achievement) { }
         binding.rvAchievement.layoutManager = GridLayoutManager(requireContext(), 3)
     }
 

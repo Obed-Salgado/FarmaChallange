@@ -11,15 +11,15 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:src="@drawable/door"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMatricula"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/llGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -34,9 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:src="@drawable/email"
-        app:layout_constraintEnd_toStartOf="@id/tvEmail"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEmail"
         app:layout_constraintStart_toStartOf="@+id/tvName"
-        app:layout_constraintTop_toBottomOf="@id/tvName" />
+        app:layout_constraintTop_toTopOf="@id/tvEmail" />
 
     <TextView
         android:id="@+id/tvEmail"
@@ -51,25 +51,30 @@
         app:layout_constraintTop_toBottomOf="@id/tvName"
         tools:text="jhony69@gmail.com" />
 
+    <ImageView
+        android:id="@+id/ivMatricula"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/matricula"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/ivEmail"
+        app:layout_constraintTop_toTopOf="@id/tvMatricula"
+        app:layout_constraintBottom_toBottomOf="@id/tvMatricula"/>
+
     <TextView
         android:id="@+id/tvMatricula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/ivEmail"
-        app:layout_constraintTop_toBottomOf="@id/ivEmail"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@id/ivEmail"
+        app:layout_constraintTop_toBottomOf="@id/tvEmail"
         tools:text="Matricula: 19257214" />
 
-    <TextView
-        android:id="@+id/tvIdGurpo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvMatricula"
-        app:layout_constraintTop_toBottomOf="@id/tvMatricula"
-        tools:text="Id de grupo: dinamita" />
+
 
     <LinearLayout
         android:id="@+id/llGroup"
@@ -78,7 +83,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvIdGurpo"
+        app:layout_constraintTop_toBottomOf="@id/tvMatricula"
         android:gravity="center_vertical">
 
         <View
