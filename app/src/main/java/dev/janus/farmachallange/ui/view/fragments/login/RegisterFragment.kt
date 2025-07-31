@@ -14,8 +14,8 @@ import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.InputsError
 import dev.janus.farmachallange.data.model.UserRegister
 import dev.janus.farmachallange.databinding.FragmentRegisterBinding
-import dev.janus.farmachallange.ui.view.dialog.ErrorDialog
-import dev.janus.farmachallange.ui.view.dialog.SuccessDialog
+import dev.janus.farmachallange.ui.view.dialog.RegisterResponseDialog
+import dev.janus.farmachallange.ui.view.dialog.RegisterResponseDialog.StateResponse
 import dev.janus.farmachallange.ui.view.dialog.UserIconDialog
 import dev.janus.farmachallange.ui.viewmodel.RegisterViewModel
 
@@ -64,15 +64,15 @@ class RegisterFragment : Fragment() {
         }
 
         viewModel.successMessage.observe(viewLifecycleOwner){
-            SuccessDialog(it){
+            RegisterResponseDialog(StateResponse.SUCCESS){
                 binding.btnBack.performClick()
-            }.show(parentFragmentManager, "SuccessDialog")
+            }.show(parentFragmentManager, "RegisterResponseDialog")
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner){
-            ErrorDialog(it){
+            RegisterResponseDialog(StateResponse.ERROR){
                 binding.btnBack.performClick()
-            }.show(parentFragmentManager, "ErrorDialog")
+            }.show(parentFragmentManager, "RegisterResponseDialog")
         }
 
         viewModel.errorInputs.observe(viewLifecycleOwner){
