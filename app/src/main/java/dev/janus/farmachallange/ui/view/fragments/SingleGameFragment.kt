@@ -26,7 +26,7 @@ import dev.janus.farmachallange.utils.clases.Timer
 
 
 @AndroidEntryPoint
-class SingleGameFragment() : Fragment() {
+class SingleGameFragment : Fragment() {
     private var _binding: FragmentSingleGameBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SingleGameViewModel by viewModels()

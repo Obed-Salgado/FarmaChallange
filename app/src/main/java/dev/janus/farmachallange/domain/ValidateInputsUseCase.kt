@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class ValidateInputsUseCase @Inject constructor() {
     operator fun invoke(user: UserRegister): InputsError {
-        val validation = InputsError().apply {
+        return InputsError().apply {
             nameError = user.name.isEmpty()
             userNameError = user.userName.isEmpty()
             tuitionError = user.tuition.isEmpty() || user.tuition.length < 5
@@ -15,7 +15,6 @@ class ValidateInputsUseCase @Inject constructor() {
             passwordError = user.password.isEmpty() || user.password.length < 8
             urlIconError = user.urlIcon.isEmpty()
         }
-        return validation
     }
 }
 

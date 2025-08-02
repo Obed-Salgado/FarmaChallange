@@ -94,12 +94,12 @@ class RegisterFragment : Fragment() {
     }
 
     private fun showErrorText(error: InputsError){
-        binding.tvNameError.text = if(error.nameError) "Error en nombre" else ""
-        binding.tvUserNameError.text = if(error.userNameError) "Error en nombre usuario" else ""
-        binding.tvTuitionError.text = if(error.tuitionError) "Error en matrícula" else ""
-        binding.tvEmailError.text = if(error.emailError) "Error en correo" else ""
-        binding.tvPasswordError.text = if(error.passwordError) "Error en contraseña" else ""
-        binding.tvIconError.text = if(error.urlIconError) "Seleccionar icono" else ""
+        binding.tvNameError.text = if(error.nameError) "Ingresa un nombre válido" else ""
+        binding.tvUserNameError.text = if(error.userNameError) "Ingresa un usuario válido" else ""
+        binding.tvTuitionError.text = if(error.tuitionError) "Ingresa una matrícula válida" else ""
+        binding.tvEmailError.text = if(error.emailError) "Ingresa un correo válido" else ""
+        binding.tvPasswordError.text = if(error.passwordError) "Ingresa un contraseña válida" else ""
+        binding.tvIconError.text = if(error.urlIconError) "Selecciona un avatar" else ""
     }
 
     private fun clearInputs() {
