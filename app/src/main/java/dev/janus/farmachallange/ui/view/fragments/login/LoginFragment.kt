@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
 
         binding.btnLoguear.setOnClickListener {
             if (TextUtils.isEmpty(binding.etEmail.getText()) || TextUtils.isEmpty(binding.etPassword.getText())) {
-                binding.tvFailure.text = "Se requiere ingresar un correo y una corntraseña"
+                binding.tvFailure.text = getString(R.string.requires_email_and_password)
                 binding.tvFailure.isVisible = true
             }else
                 viewModel.setUserData(binding.etEmail.text.toString(), binding.etPassword.text.toString())
@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.showLottie.observe(viewLifecycleOwner){
-            showShimmer(it)
+            showLottie(it)
         }
 
         viewModel.successMessage.observe(viewLifecycleOwner){
@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun showShimmer(show: Boolean) {
+    private fun showLottie(show: Boolean) {
         binding.viewLoading.isVisible = show
         binding.constraintData.isVisible = !show
         binding.btnRegister.isVisible = !show

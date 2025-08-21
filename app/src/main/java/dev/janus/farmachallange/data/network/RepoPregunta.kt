@@ -4,6 +4,7 @@ package dev.janus.farmachallange.data.network
 import com.google.firebase.firestore.FirebaseFirestore
 import dev.janus.farmachallange.data.model.Nivel
 import dev.janus.farmachallange.data.model.Pregunta
+import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.data.model.Ronda
 import dev.janus.farmachallange.utils.UserManager
 import kotlinx.coroutines.Dispatchers
@@ -13,21 +14,24 @@ import javax.inject.Inject
 
 class RepoPregunta @Inject constructor(private val db: FirebaseFirestore) {
 
-    suspend fun getQuestionsData(idNivel: String, idRonda: String): List<Pregunta> {
+    suspend fun getQuestionsData(idNivel: String, idRonda: String): ResponseState<List<Pregunta>> {
         return withContext(Dispatchers.IO) {
-            val listaPreguntas = mutableListOf<Pregunta>()
+            val questionList = mutableListOf<Pregunta>()
             val query =
                 db.collection("preguntas").document(idNivel).collection("rondas").document(idRonda)
                     .collection("pregunta").get().await()
             for (document in query.documents) {
                 val pregunta = document.toObject(Pregunta::class.java)
-                pregunta?.let { listaPreguntas.add(it) }
+                pregunta?.let { questionList.add(it) }
             }
-            listaPreguntas
+            if(questionList.isNotEmpty())
+                ResponseState.Success(questionList)
+            else
+                ResponseState.Error("Empty list")
         }
     }
 
-    suspend fun getLevelName(): List<Nivel> = withContext(Dispatchers.IO) {
+    suspend fun getLevelName(): ResponseState<List<Nivel>> = withContext(Dispatchers.IO) {
         try {
             val levelList = mutableListOf<Nivel>()
             val querySnapshot =
@@ -38,13 +42,16 @@ class RepoPregunta @Inject constructor(private val db: FirebaseFirestore) {
                 nivel?.let { levelList.add(it) }
             }
 
-            levelList
+            if(levelList.isNotEmpty())
+                ResponseState.Success(levelList)
+            else
+                ResponseState.Error("Empty list")
         } catch (e: Exception) {
-            emptyList() // Devolver una lista vacía en caso de error
+            ResponseState.Error(e.message ?: "Error")
         }
     }
 
-    suspend fun getRonda(idNivel: String): List<Ronda> =
+    suspend fun getRonda(idNivel: String): ResponseState<List<Ronda>> =
         withContext(Dispatchers.IO) {
             try {
                 val rondaList = mutableListOf<Ronda>()
@@ -55,9 +62,11 @@ class RepoPregunta @Inject constructor(private val db: FirebaseFirestore) {
                     ronda?.id = document.id
                     ronda?.let { rondaList.add(ronda) }
                 }
-                rondaList
+                if(rondaList.isNotEmpty())
+                    ResponseState.Success(rondaList)
+                else ResponseState.Error("Empty list")
             } catch(e:Exception) {
-                emptyList()
+                ResponseState.Error(e.message ?: "Error")
             }
     }
 

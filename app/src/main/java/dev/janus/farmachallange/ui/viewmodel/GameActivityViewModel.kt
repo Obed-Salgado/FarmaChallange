@@ -10,7 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel
-class GameActivityViewModel @Inject constructor(private val getUserUseCase:GetUserDataUseCase, private val repoStatus: RepoEstadistica) :ViewModel() {
+class GameActivityViewModel @Inject constructor(
+    private val getUserUseCase: GetUserDataUseCase,
+    private val repoStatus: RepoEstadistica
+) :ViewModel() {
 
     val fetchUser = liveData(Dispatchers.IO) {
         getUserUseCase().collect{

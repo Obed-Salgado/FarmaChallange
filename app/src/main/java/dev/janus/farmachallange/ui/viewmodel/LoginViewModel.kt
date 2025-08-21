@@ -28,8 +28,9 @@ class LoginViewModel @Inject constructor(private val login: LoginUseCase) : View
                     _errorMessage.value = response.message
                 }
                 is ResponseState.Success -> {
-                    _successMessage.value = response.data.toString()
+                    _successMessage.value = response.data
                 }
+                is ResponseState.Loading -> {}
             }
             _showLottie.postValue(false)
         }

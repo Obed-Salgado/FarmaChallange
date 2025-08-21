@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +34,10 @@ class MenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         inintRecyclerView()
         onBackPressed()
+
+        menuViewModel.showLottie.observe(viewLifecycleOwner){
+            showLottie(it)
+        }
     }
 
     private fun inintRecyclerView(){
@@ -54,5 +59,9 @@ class MenuFragment : Fragment() {
                 requireActivity().finish()
             }
         })
+    }
+
+    private fun showLottie(show: Boolean) {
+        binding.viewLoading.isVisible = show
     }
 }

@@ -29,13 +29,20 @@ class ProgressViewModel @Inject constructor(
     fun getLevelsProgress(){
         viewModelScope.launch {
             _showLottie.postValue(true)
-            when(val response = getProgress(getLevelUseCase())){
-                is ResponseState.Error -> {
+
+            var levels = listOf<Nivel>() //Temporal
+            when(val response  = getLevelUseCase()){
+                is ResponseState.Error -> response.message
+                is ResponseState.Loading -> {}
+                is ResponseState.Success -> levels = response.data
+            }
+
+            when(val response = getProgress.invoke(levels)){
+                is ResponseState.Error ->
                     _errorMessage.value = response.message
-                }
-                is ResponseState.Success -> {
-                    _progress.value = response.data as List<Progress>
-                }
+                is ResponseState.Success ->
+                    _progress.value = response.data
+                is ResponseState.Loading -> {}
             }
             _showLottie.postValue(false)
         }

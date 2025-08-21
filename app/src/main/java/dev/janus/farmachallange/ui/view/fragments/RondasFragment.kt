@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -39,9 +40,13 @@ class RondasFragment : Fragment() {
         idNivel = args.idRonda
         rondasViewModel.getRonda(idNivel)
         initRecyclerView()
+
+        rondasViewModel.showLottie.observe(viewLifecycleOwner){
+            showLottie(it)
+        }
     }
 
-    fun initRecyclerView(){
+    private fun initRecyclerView(){
         rondasViewModel.nameRonda.observe(viewLifecycleOwner, Observer { nameRonda->
             adapter = RondaListAdapter(nameRonda, clickItem = {goToGameFragment(it)})
             binding.rvRondas.adapter = adapter
@@ -65,6 +70,10 @@ class RondasFragment : Fragment() {
             val dialog = builder.create()
             dialog.show()
         }
+    }
+
+    private fun showLottie(show: Boolean) {
+        binding.viewLoading.isVisible = show
     }
 }
 

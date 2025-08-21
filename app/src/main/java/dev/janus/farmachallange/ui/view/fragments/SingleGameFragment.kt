@@ -161,7 +161,10 @@ class SingleGameFragment : Fragment() {
 
     private fun showDialog(nameDialog: String) {
         val dialog = EvaluationDialog(
-            description, { setUpQuestion() }, nameDialog
+            respuestaOk,
+            description,
+            { setUpQuestion() },
+            nameDialog
         )
         dialog.show(childFragmentManager, "CorrectDialog")
     }
@@ -195,16 +198,20 @@ class SingleGameFragment : Fragment() {
             }
         }
 
-        viewModel.finishGame.observe(viewLifecycleOwner){
+        viewModel.finishGame.observe(viewLifecycleOwner) {
             showResultGame()
         }
 
-        viewModel.numberOfQuestions.observe(viewLifecycleOwner){
+        viewModel.numberOfQuestions.observe(viewLifecycleOwner) {
             setUpQuestion()
         }
 
         viewModel.numberquest.observe(viewLifecycleOwner) {
             binding.tvCountQuest.text = it
+        }
+
+        viewModel.showLottie.observe(viewLifecycleOwner) {
+            showLottie(it)
         }
     }
 
@@ -234,5 +241,9 @@ class SingleGameFragment : Fragment() {
             override fun handleOnBackPressed() {
             }
         })
+    }
+
+    private fun showLottie(show: Boolean) {
+        binding.viewLoading.isVisible = show
     }
 }

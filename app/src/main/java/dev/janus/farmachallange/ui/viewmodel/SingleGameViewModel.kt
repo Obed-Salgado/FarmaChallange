@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.janus.farmachallange.data.model.Pregunta
+import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.data.network.RepoEstadistica
 import dev.janus.farmachallange.domain.GetQuestionDataUseCase
 import dev.janus.farmachallange.domain.setIncorrectAnswerUseCase
@@ -20,6 +21,8 @@ class SingleGameViewModel @Inject constructor(
     private val repoStatus: RepoEstadistica
 ) : ViewModel() {
 
+    private val _showLottie = MutableLiveData<Boolean>()
+    val showLottie: LiveData<Boolean> get() = _showLottie
     private val _question = MutableLiveData<Pregunta>()
     val question: LiveData<Pregunta> get() = _question
     private val _questions = MutableLiveData<List<Pregunta>>()
@@ -32,9 +35,16 @@ class SingleGameViewModel @Inject constructor(
 
     fun getAllQuestions(idNivel: String, idRonda: String){
         viewModelScope.launch {
-            val temp = getQuestionDataUseCase.invoke(idNivel, idRonda).shuffled()
-            _questions.value = temp
-            _numberOfQuestions.value = _questions.value?.size ?: 0
+            _showLottie.postValue(true)
+            when(val response = getQuestionDataUseCase.invoke(idNivel, idRonda)){
+                is ResponseState.Error -> response.message
+                is ResponseState.Loading -> {}
+                is ResponseState.Success -> {
+                    _questions.value = response.data.shuffled()
+                    _numberOfQuestions.value = _questions.value?.size ?: 0
+                }
+            }
+            _showLottie.postValue(false)
         }
     }
 

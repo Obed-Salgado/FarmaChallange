@@ -14,7 +14,7 @@ import kotlin.coroutines.resumeWithException
 
 class RepoProgreso @Inject constructor(private val db: FirebaseFirestore) {
 
-    suspend fun getLevelProgress(levels: List<Nivel>): ResponseState = withContext(Dispatchers.IO){
+    suspend fun getLevelProgress(levels: List<Nivel>): ResponseState<List<Progress>> = withContext(Dispatchers.IO){
         val progressList = mutableListOf<Progress>()
         try {
             val id = UserManager.getInstanceUser().id
@@ -43,10 +43,10 @@ class RepoProgreso @Inject constructor(private val db: FirebaseFirestore) {
             if (progressList.isNotEmpty()) {
                 ResponseState.Success(progressList)
             } else {
-                ResponseState.Error("No hay progreso disponibles")
+                ResponseState.Error("Empty list")
             }
         } catch (e: Exception){
-            ResponseState.Error(e.message ?: "Error desconocido")
+            ResponseState.Error(e.message ?: "Error")
         }
     }
 }

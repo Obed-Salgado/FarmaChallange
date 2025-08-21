@@ -23,10 +23,10 @@ class RepoUsuarios @Inject constructor(
 
     suspend fun registerUser(
         userInfo: UserRegister
-    ): ResponseState {
+    ): ResponseState<String> {
         return withContext(Dispatchers.IO){
             try {
-                suspendCoroutine<ResponseState> { continuation ->
+                suspendCoroutine { continuation ->
                     checkIfUserExists(userInfo.userName, userInfo.email) { userExists ->
                         if (userExists) {
                             continuation.resume(ResponseState.Error("El nombre de usuario o correo electrónico ya están en uso."))
@@ -79,10 +79,10 @@ class RepoUsuarios @Inject constructor(
     suspend fun loginUser(
         email: String,
         password: String
-    ): ResponseState {
+    ): ResponseState<String> {
         return withContext(Dispatchers.IO){
             try {
-                suspendCoroutine<ResponseState> { continuation ->
+                suspendCoroutine { continuation ->
                     auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {

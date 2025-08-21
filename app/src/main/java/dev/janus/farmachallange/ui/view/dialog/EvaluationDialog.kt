@@ -14,6 +14,7 @@ import dev.janus.farmachallange.databinding.DialogEvaluationBinding
 
 class EvaluationDialog(
     private val respuesta: String,
+    private val descripcion: String,
     private val generarPregunta: () -> Unit,
     private val respuestaOk: String
 ) : DialogFragment() {
@@ -30,7 +31,8 @@ class EvaluationDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvDescription.text = respuesta
+        binding.tvDescription.text = descripcion
+        binding.tvRespuesta.text = respuesta
         if (respuestaOk == "incorrecto"){
             errorAnswer()
         }else if (respuestaOk == "overtime"){
