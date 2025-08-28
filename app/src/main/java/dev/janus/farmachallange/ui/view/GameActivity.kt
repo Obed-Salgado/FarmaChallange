@@ -16,6 +16,7 @@ import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.databinding.ActivityGameBinding
 import dev.janus.farmachallange.ui.viewmodel.GameActivityViewModel
+import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.clases.Timer
 
@@ -89,7 +90,8 @@ class GameActivity : AppCompatActivity() {
     private fun observeUserData() {
         viewModel.fetchUser.observeForever { user ->
             updateUserInfo(user)
-            startOrCancelTimer(user.corazones)
+            if(!timer.isTimerInProgress())
+                startOrCancelTimer(user.corazones)
         }
     }
 
@@ -116,15 +118,16 @@ class GameActivity : AppCompatActivity() {
 
     private fun handleTimerFinish(corazones: Int) {
         val updatedCorazones = corazones + 1
-        viewModel.updateHeats(updatedCorazones)
+        viewModel.updateHearts(updatedCorazones)
     }
 
     private fun updateUserInfo(user: Usuario?) {
         if (user != null) {
+            UserManager.setUser(user)
             binding.tvName.text = user.usuario
             binding.tvCorazon.text = user.corazones.toString()
             binding.tvMoneda.text = user.monedas.toString()
-            Glide.with(this)
+            Glide.with(baseContext)
                 .load(user.urlIcon)
                 .into(binding.ivIconUser)
         } else {

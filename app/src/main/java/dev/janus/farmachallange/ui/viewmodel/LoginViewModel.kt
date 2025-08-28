@@ -6,12 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.janus.farmachallange.data.model.ResponseState
+import dev.janus.farmachallange.domain.GetExistSessionUseCase
+import dev.janus.farmachallange.domain.LogOutUseCase
 import dev.janus.farmachallange.domain.LoginUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val login: LoginUseCase) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val login: LoginUseCase,
+    private val logOut: LogOutUseCase,
+    private val existSession: GetExistSessionUseCase
+) : ViewModel() {
 
     private val _showLottie = MutableLiveData<Boolean>()
     val showLottie: LiveData<Boolean> get() = _showLottie
@@ -23,7 +29,7 @@ class LoginViewModel @Inject constructor(private val login: LoginUseCase) : View
     fun setUserData(email:String, password: String) {
         viewModelScope.launch {
             _showLottie.postValue(true)
-            when(val response = login(email, password)){
+            when(val response = login.invoke(email, password)){
                 is ResponseState.Error -> {
                     _errorMessage.value = response.message
                 }
@@ -35,4 +41,8 @@ class LoginViewModel @Inject constructor(private val login: LoginUseCase) : View
             _showLottie.postValue(false)
         }
     }
+
+    fun verifyExistSession(): Boolean = existSession.invoke()
+
+    fun closeSession() = logOut.invoke()
 }

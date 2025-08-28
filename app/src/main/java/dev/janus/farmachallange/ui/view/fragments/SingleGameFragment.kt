@@ -96,7 +96,8 @@ class SingleGameFragment : Fragment() {
         if (UserManager.getInstanceUser().corazones != 0) {
             incorrectAnswer++
             showDialog("overtime")
-            viewModel.updateHearts(UserManager.getInstanceUser().corazones - 1)
+            UserManager.updateHearts()
+            viewModel.updateHearts(UserManager.getInstanceUser().corazones)
         } else
             overHerts()
     }
@@ -129,7 +130,8 @@ class SingleGameFragment : Fragment() {
                 //Agregar respuesta incorrecta para estadistica
 //                val nivel = idNivel.removeRange(0, idNivel.length - 1)
 //                viewModel.setWrongAnswer(nivel.toInt(), idRonda.toInt(), pregunta, butonRes.text.toString(), binding.tvPregunta.text.toString())
-                viewModel.updateHearts(UserManager.getInstanceUser().corazones - 1)
+                UserManager.updateHearts()
+                viewModel.updateHearts(UserManager.getInstanceUser().corazones)
             }
         } else overHerts()
     }

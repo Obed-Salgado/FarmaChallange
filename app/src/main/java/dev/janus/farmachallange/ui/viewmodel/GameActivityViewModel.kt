@@ -20,7 +20,8 @@ class GameActivityViewModel @Inject constructor(
             emit(it)
         }
     }
-    fun updateHeats(hearts: Int) {
+
+    fun updateHearts(hearts: Int) {
         repoStatus.uptdateHearts(UserManager.getInstanceUser().id, hearts)
     }
 }

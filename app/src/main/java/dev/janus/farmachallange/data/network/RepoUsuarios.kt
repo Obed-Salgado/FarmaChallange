@@ -111,8 +111,19 @@ class RepoUsuarios @Inject constructor(
         }
     }
 
+    fun logOutUser() {
+        auth.signOut()
+    }
 
-     suspend fun getUserData(idUser: String?): Flow<Usuario> = callbackFlow {
+    fun checkExistSession(): Boolean{
+        auth.currentUser?.let {
+            UserManager.setUser(Usuario())
+            UserManager.setUserId(it.uid)
+        }
+        return auth.currentUser != null
+    }
+
+     fun getUserData(idUser: String?): Flow<Usuario> = callbackFlow {
         val eventDocument = db.collection("usuarios").document(idUser!!)
         val suscripcion = eventDocument.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if (documentSnapshot!!.exists()){

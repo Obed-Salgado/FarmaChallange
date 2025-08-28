@@ -39,7 +39,6 @@ class LoginFragment : Fragment() {
                 binding.tvFailure.isVisible = true
             }else
                 viewModel.setUserData(binding.etEmail.text.toString(), binding.etPassword.text.toString())
-
         }
 
         binding.btnRegister.setOnClickListener {
