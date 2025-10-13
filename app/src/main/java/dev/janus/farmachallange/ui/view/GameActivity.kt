@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
@@ -16,6 +15,7 @@ import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.Usuario
 import dev.janus.farmachallange.databinding.ActivityGameBinding
 import dev.janus.farmachallange.ui.viewmodel.GameActivityViewModel
+import dev.janus.farmachallange.utils.Constants.TIME_OF_TIMER_HEART
 import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.NetworkAvailable
 import dev.janus.farmachallange.utils.clases.Timer
@@ -33,7 +33,7 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (networkAvailable.isNetworkAvailable(this)) {
-            timer = Timer(10000)
+            timer = Timer(TIME_OF_TIMER_HEART)
             //  ocultarButtonNav()
             // Configurar el NavController
             val navHostFragment =
@@ -95,20 +95,19 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun startOrCancelTimer(corazones: Int) {
-        val isTimerVisible = corazones < 12
-        binding.tvTime.isVisible = isTimerVisible
+    private fun startOrCancelTimer(hearts: Int) {
+        val isTimerVisible = hearts < 12
         if (isTimerVisible) {
             timer.startTempHearts(
                 onTick = { minutesRemaining, secondsRemaining ->
                     updateTimerDisplay(minutesRemaining, secondsRemaining)
                 },
                 onFinish = {
-                    handleTimerFinish(corazones)
+                    handleTimerFinish()
                 }
             )
         } else {
-            binding.tvTime.isVisible = false
+            binding.tvTime.text = ""
         }
     }
 
@@ -116,9 +115,9 @@ class GameActivity : AppCompatActivity() {
         binding.tvTime.text = String.format("%02d:%02d", minutesRemaining, secondsRemaining)
     }
 
-    private fun handleTimerFinish(corazones: Int) {
-        val updatedCorazones = corazones + 1
-        viewModel.updateHearts(updatedCorazones)
+    private fun handleTimerFinish() {
+        UserManager.incrementHearts()
+        viewModel.updateHearts(UserManager.getHearts())
     }
 
     private fun updateUserInfo(user: Usuario?) {

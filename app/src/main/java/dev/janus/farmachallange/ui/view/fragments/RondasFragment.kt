@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,22 +38,22 @@ class RondasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         idNivel = args.idRonda
         rondasViewModel.getRonda(idNivel)
-        initRecyclerView()
+        initObservers()
+    }
+
+    private fun initObservers(){
+        rondasViewModel.nameRonda.observe(viewLifecycleOwner) { nameRonda ->
+            adapter = RondaListAdapter(nameRonda, clickItem = { goToGameFragment(it) })
+            binding.rvRondas.adapter = adapter
+            binding.rvRondas.layoutManager = LinearLayoutManager(requireContext())
+        }
 
         rondasViewModel.showLottie.observe(viewLifecycleOwner){
             showLottie(it)
         }
     }
 
-    private fun initRecyclerView(){
-        rondasViewModel.nameRonda.observe(viewLifecycleOwner, Observer { nameRonda->
-            adapter = RondaListAdapter(nameRonda, clickItem = {goToGameFragment(it)})
-            binding.rvRondas.adapter = adapter
-            binding.rvRondas.layoutManager = LinearLayoutManager(requireContext())
-        })
-    }
-
-    fun goToGameFragment(idRonda:String){
+    private fun goToGameFragment(idRonda:String){
         if (UserManager.getInstanceUser().corazones != 0){
             findNavController().navigate(RondasFragmentDirections.actionRondasFragmentToSingleGameFragment(idNivel,idRonda))
         }

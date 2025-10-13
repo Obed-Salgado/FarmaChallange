@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_dialog_question"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#74C365"
+            android:text="!FELICIDADES¡"
+            />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="Has recibido la insignia por haber completado el nivel 1: CONCEPTOS GENERALES. Puedes encontrarla en la sección de “perfil”"/>
+
+
+        <ImageView
+            android:id="@+id/ivSticker"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/moneda"
+            android:layout_margin="10dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/background_button_corect"
+            android:backgroundTint="@color/moradoU"
+            android:text="Siguiente"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

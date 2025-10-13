@@ -21,6 +21,7 @@ import dev.janus.farmachallange.ui.view.dialog.ResultadosDialog
 import dev.janus.farmachallange.ui.viewmodel.SingleGameViewModel
 import dev.janus.farmachallange.utils.Constants.COST_HELP_COIN
 import dev.janus.farmachallange.utils.Constants.COST_REWARD_COIN
+import dev.janus.farmachallange.utils.Constants.TIME_OF_TIMER_QUESTION
 import dev.janus.farmachallange.utils.UserManager
 import dev.janus.farmachallange.utils.clases.Timer
 
@@ -36,7 +37,7 @@ class SingleGameFragment : Fragment() {
     private val args: SingleGameFragmentArgs by navArgs()
     private lateinit var idNivel: String
     private lateinit var idRonda: String
-    private var pregunta: Int = 0
+    private var question: Int = 0
     private lateinit var timer: Timer
     private var distractorClicks: Int = 0
     private  var correctAnswer:Int = 0
@@ -53,7 +54,7 @@ class SingleGameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        timer = Timer(20000)
+        timer = Timer(TIME_OF_TIMER_QUESTION)
         idNivel = args.idNivel
         idRonda = args.idRonda
 
@@ -87,7 +88,7 @@ class SingleGameFragment : Fragment() {
 
     private fun onTick(secondsRemaining: Long) {
         if (UserManager.getInstanceUser().corazones != 0) {
-            binding.prbTiempo.progress += 5
+            binding.prbTiempo.progress += 4
             binding.tvTiempo.text = "$secondsRemaining"
         }
     }
@@ -96,8 +97,8 @@ class SingleGameFragment : Fragment() {
         if (UserManager.getInstanceUser().corazones != 0) {
             incorrectAnswer++
             showDialog("overtime")
-            UserManager.updateHearts()
-            viewModel.updateHearts(UserManager.getInstanceUser().corazones)
+            UserManager.decrementHearts()
+            viewModel.updateHearts(UserManager.getHearts())
         } else
             overHerts()
     }
@@ -130,8 +131,8 @@ class SingleGameFragment : Fragment() {
                 //Agregar respuesta incorrecta para estadistica
 //                val nivel = idNivel.removeRange(0, idNivel.length - 1)
 //                viewModel.setWrongAnswer(nivel.toInt(), idRonda.toInt(), pregunta, butonRes.text.toString(), binding.tvPregunta.text.toString())
-                UserManager.updateHearts()
-                viewModel.updateHearts(UserManager.getInstanceUser().corazones)
+                UserManager.decrementHearts()
+                viewModel.updateHearts(UserManager.getHearts())
             }
         } else overHerts()
     }
@@ -148,9 +149,9 @@ class SingleGameFragment : Fragment() {
     private fun goToHome() = findNavController().popBackStack(R.id.menuFragment, false)
 
     private fun setUpQuestion() {
-        viewModel.getQuestion(pregunta)
+        viewModel.getQuestion(question)
         distractorClicks = 0
-        pregunta++
+        question++
     }
 
     private fun showResultGame() {

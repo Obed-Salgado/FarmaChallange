@@ -34,13 +34,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
-            android:text="0"
+            android:text="10"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="@+id/imageView3"/>
 
         <TextView
             android:id="@+id/tvTime"
@@ -65,8 +64,7 @@
             android:src="@drawable/moneda"
             app:layout_constraintBottom_toBottomOf="@+id/tvCorazon"
             app:layout_constraintStart_toEndOf="@+id/tvCorazon"
-            app:layout_constraintTop_toTopOf="@+id/tvCorazon"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="@+id/tvCorazon"/>
 
         <TextView
             android:id="@+id/tvMoneda"
@@ -79,8 +77,7 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="@+id/imageView2"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
         <!-- LayoutName -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,8 +87,7 @@
             android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvCorazon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvCorazon"
-            app:layout_constraintVertical_bias="0.545">
+            app:layout_constraintTop_toTopOf="@+id/tvCorazon">
 
             <ImageView
                 android:id="@+id/iv_icon_user"
@@ -132,14 +128,13 @@
 
 <!--    "@style/Widget.Design.BottomNavigationView"-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        style="@style/Widget.Design.BottomNavigationView"
+        style="@style/MyBottomNavigation"
         android:id="@+id/navigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/backgroundDetails"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/botton_nav" />
+        app:menu="@menu/bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

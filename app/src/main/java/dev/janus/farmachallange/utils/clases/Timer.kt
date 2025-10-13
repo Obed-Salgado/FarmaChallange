@@ -40,7 +40,7 @@ class Timer(private val seconds: Long) {
     fun cancelTem() {
         timer.let {
             timer?.cancel()
-            //CHECAR si puedo asignarle null
+            timer = null
         }
     }
 }

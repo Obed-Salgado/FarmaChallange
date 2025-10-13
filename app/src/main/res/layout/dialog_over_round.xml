@@ -7,8 +7,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/background_overronda"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,9 +18,9 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="Ronda Finalizada"
             android:textColor="@color/white"
-            android:layout_marginTop="5dp"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +31,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Resultados"
             android:textColor="@color/black"
             android:textSize="20dp"
@@ -53,19 +55,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/correct"
+                app:layout_constraintBottom_toBottomOf="@+id/tvShowCorrect"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvShowCorrect"
-                app:layout_constraintBottom_toBottomOf="@+id/tvShowCorrect"/>
+                app:layout_constraintTop_toTopOf="@+id/tvShowCorrect" />
 
             <TextView
                 android:id="@+id/tvShowCorrect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/ivCorrect"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="10" />
@@ -76,42 +78,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/_ncorrect"
+                app:layout_constraintBottom_toBottomOf="@+id/tvShowIncorrect"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvShowIncorrect"
-                app:layout_constraintBottom_toBottomOf="@+id/tvShowIncorrect" />
+                app:layout_constraintTop_toTopOf="@+id/tvShowIncorrect" />
 
             <TextView
                 android:id="@+id/tvShowIncorrect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/ivIncorrect"
                 app:layout_constraintTop_toBottomOf="@id/tvShowCorrect"
                 tools:text="10" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnContinuar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:background="@drawable/background_button_corect"
+            android:backgroundTint="@color/azul"
             android:text="Continuar"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

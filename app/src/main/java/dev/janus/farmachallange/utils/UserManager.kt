@@ -14,10 +14,17 @@ object UserManager {
         this.user = user
     }
 
-    fun updateHearts(){
+    fun decrementHearts() {
         if(this.user.corazones > 0)
             this.user.corazones -= 1
     }
+
+    fun incrementHearts(){
+        if(this.user.corazones < 12)
+            this.user.corazones += 1
+    }
+
+    fun getHearts(): Int = user.corazones
 
     fun getInstanceUser(): Usuario {
         if (user != null)

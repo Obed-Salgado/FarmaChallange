@@ -4,4 +4,11 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <style name="MyBottomNavigation">
+        <item name="itemBackground">@color/bottom_navigation_bg</item>
+        <item name="itemIconTint">@color/bottom_navigation_selector</item>
+        <item name="itemTextColor">@color/bottom_navigation_selector</item>
+        <item name="itemActiveIndicatorStyle">@style/ShapeAppearance.Material3.Corner.None</item>
+    </style>
 </resources>
