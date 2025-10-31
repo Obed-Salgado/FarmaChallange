@@ -3,8 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="19dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginEnd="4dp"
     android:backgroundTint="#000D59"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -16,8 +14,8 @@
 
         <ImageView
             android:id="@+id/ivIconLevel"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

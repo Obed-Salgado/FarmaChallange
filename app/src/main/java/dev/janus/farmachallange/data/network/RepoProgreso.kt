@@ -1,7 +1,7 @@
 package dev.janus.farmachallange.data.network
 
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.data.model.Progress
 import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.utils.UserManager
@@ -14,7 +14,7 @@ import kotlin.coroutines.resumeWithException
 
 class RepoProgreso @Inject constructor(private val db: FirebaseFirestore) {
 
-    suspend fun getLevelProgress(levels: List<Nivel>): ResponseState<List<Progress>> = withContext(Dispatchers.IO){
+    suspend fun getLevelProgress(levels: List<Level>): ResponseState<List<Progress>> = withContext(Dispatchers.IO){
         val progressList = mutableListOf<Progress>()
         try {
             val id = UserManager.getInstanceUser().id

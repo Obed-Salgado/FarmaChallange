@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.janus.farmachallange.R
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.databinding.ItemLevelBinding
 
 class ListLevelAdapter(
-    private val level: List<Nivel>,
+    private val level: List<Level>,
     private val selectLevel: (String) -> Unit
 ) : RecyclerView.Adapter<ListLevelViewHolder>() {
 

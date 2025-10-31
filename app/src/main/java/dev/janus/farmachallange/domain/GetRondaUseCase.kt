@@ -1,6 +1,5 @@
 package dev.janus.farmachallange.domain
 
-import dev.janus.farmachallange.data.model.Nivel
 import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.data.model.Ronda
 import dev.janus.farmachallange.data.network.RepoPregunta

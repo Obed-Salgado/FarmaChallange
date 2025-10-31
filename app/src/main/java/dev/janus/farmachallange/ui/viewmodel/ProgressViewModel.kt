@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.data.model.Progress
 import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.domain.GetLevelUseCase
@@ -30,7 +30,7 @@ class ProgressViewModel @Inject constructor(
         viewModelScope.launch {
             _showLottie.postValue(true)
 
-            var levels = listOf<Nivel>() //Temporal
+            var levels = listOf<Level>() //Temporal
             when(val response  = getLevelUseCase()){
                 is ResponseState.Error -> response.message
                 is ResponseState.Loading -> {}

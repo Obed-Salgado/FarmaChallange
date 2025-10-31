@@ -8,7 +8,7 @@
     android:layout_margin="15dp">
 
     <ImageView
-        android:id="@+id/iv_azul"
+        android:id="@+id/iv_icon_user"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"

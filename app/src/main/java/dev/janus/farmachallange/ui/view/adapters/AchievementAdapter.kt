@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.janus.farmachallange.R
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.databinding.ItemAchievementBinding
 
 class AchievementAdapter(
-    private val achievement: List<Nivel>,
+    private val achievement: List<Level>,
     private val selectAchievement: (String) -> Unit
 ): RecyclerView.Adapter<AchievementViewHolder>() {
 

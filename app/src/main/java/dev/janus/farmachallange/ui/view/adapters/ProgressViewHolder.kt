@@ -2,9 +2,9 @@ package dev.janus.farmachallange.ui.view.adapters
 
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import dev.janus.farmachallange.data.model.Progress
 import dev.janus.farmachallange.databinding.ItemProgressBinding
+import dev.janus.farmachallange.utils.loadImage
 
 class ProgressViewHolder (private val binding: ItemProgressBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -12,9 +12,7 @@ class ProgressViewHolder (private val binding: ItemProgressBinding): RecyclerVie
         binding.tvLevel.text = progress.title
         binding.tvDescription.text = progress.description
         binding.progressBar.progress = (progress.progress * 100).toInt()
-        Glide.with(binding.root.context)
-            .load(progress.icon)
-            .into(binding.ivIconLevel)
+        binding.ivIconLevel.loadImage(progress.icon)
         binding.cvProgress.setCardBackgroundColor(Color.TRANSPARENT)
     }
 }

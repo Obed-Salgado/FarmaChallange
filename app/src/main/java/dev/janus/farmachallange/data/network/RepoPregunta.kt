@@ -2,7 +2,7 @@ package dev.janus.farmachallange.data.network
 
 
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.data.model.Pregunta
 import dev.janus.farmachallange.data.model.ResponseState
 import dev.janus.farmachallange.data.model.Ronda
@@ -31,15 +31,15 @@ class RepoPregunta @Inject constructor(private val db: FirebaseFirestore) {
         }
     }
 
-    suspend fun getLevelName(): ResponseState<List<Nivel>> = withContext(Dispatchers.IO) {
+    suspend fun getLevelName(): ResponseState<List<Level>> = withContext(Dispatchers.IO) {
         try {
-            val levelList = mutableListOf<Nivel>()
+            val levelList = mutableListOf<Level>()
             val querySnapshot =
                 db.collection("preguntas").get().await() // Usar await() para esperar la respuesta
             for (document in querySnapshot.documents) {
-                val nivel = document.toObject(Nivel::class.java)
-                nivel?.id = document.id
-                nivel?.let { levelList.add(it) }
+                val level = document.toObject(Level::class.java)
+                level?.id = document.id
+                level?.let { levelList.add(it) }
             }
 
             if(levelList.isNotEmpty())

@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import dev.janus.farmachallange.R
 import dev.janus.farmachallange.data.model.InputsError
@@ -18,6 +17,7 @@ import dev.janus.farmachallange.ui.view.dialog.RegisterResponseDialog
 import dev.janus.farmachallange.ui.view.dialog.RegisterResponseDialog.StateResponse
 import dev.janus.farmachallange.ui.view.dialog.UserIconDialog
 import dev.janus.farmachallange.ui.viewmodel.RegisterViewModel
+import dev.janus.farmachallange.utils.loadImage
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -81,9 +81,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun selectIcon(url: String){
-        Glide.with(requireContext())
-            .load(url)
-            .into(binding.ivIcon)
+        binding.ivIcon.loadImage(url)
         urlIcon = url
     }
 

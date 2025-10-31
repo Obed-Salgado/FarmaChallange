@@ -10,14 +10,17 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import dev.janus.farmachallange.data.model.Nivel
+import dev.janus.farmachallange.data.model.Level
 import dev.janus.farmachallange.databinding.FragmentProfileBinding
 import dev.janus.farmachallange.ui.view.MainActivity
 import dev.janus.farmachallange.ui.view.adapters.AchievementAdapter
 import dev.janus.farmachallange.ui.viewmodel.LoginViewModel
 import dev.janus.farmachallange.ui.viewmodel.MenuViewModel
+import dev.janus.farmachallange.utils.Constants.SHARED_LEVELS_KEY
 import dev.janus.farmachallange.utils.UserManager
-import dev.janus.farmachallange.utils.clases.provideList
+import dev.janus.farmachallange.utils.clases.UniformItemDecoration
+import dev.janus.farmachallange.utils.dpToPx
+import dev.janus.farmachallange.utils.provideList
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -38,6 +41,8 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpInfoUser()
         onBackPressed()
+
+        val levels = arguments?.getParcelableArrayList<Level>(SHARED_LEVELS_KEY)
 
 //        viewModel.nameLevel.observe(viewLifecycleOwner){
 //            setUpRecyclerView(it)
@@ -61,7 +66,10 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun setUpRecyclerView(achievement: List<Nivel>){
+    private fun setUpRecyclerView(achievement: List<Level>){
+        val uniformPaddingInPx = 8.dpToPx(requireContext())
+        val itemDecoration = UniformItemDecoration(uniformPaddingInPx)
+        binding.rvAchievement.addItemDecoration(itemDecoration)
         binding.rvAchievement.adapter = AchievementAdapter(achievement) { }
         binding.rvAchievement.layoutManager = GridLayoutManager(requireContext(), 3)
     }
