@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,10 @@ class ProgressFragment : Fragment() {
         viewModel.progress.observe(viewLifecycleOwner){
             setUpRecyclerView(it)
         }
+
+        viewModel.showLottie.observe(viewLifecycleOwner) {
+            showLottie(it)
+        }
     }
 
     private fun setUpRecyclerView(progress: List<Progress>){
@@ -51,5 +56,9 @@ class ProgressFragment : Fragment() {
                 requireActivity().finish()
             }
         })
+    }
+
+    private fun showLottie(show: Boolean) {
+        binding.viewLoading.isVisible = show
     }
 }

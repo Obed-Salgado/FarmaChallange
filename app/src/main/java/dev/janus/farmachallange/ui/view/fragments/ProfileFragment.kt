@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(achievement: List<Level>){
-        val uniformPaddingInPx = 8.dpToPx(requireContext())
+        val uniformPaddingInPx = 4.dpToPx(requireContext())
         val itemDecoration = UniformItemDecoration(uniformPaddingInPx)
         binding.rvAchievement.addItemDecoration(itemDecoration)
         binding.rvAchievement.adapter = AchievementAdapter(achievement) { }

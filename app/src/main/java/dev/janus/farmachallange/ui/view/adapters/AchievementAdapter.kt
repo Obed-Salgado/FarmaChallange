@@ -23,6 +23,9 @@ class AchievementAdapter(
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         val item = achievement[position]
-        holder.render(item, selectAchievement)
+        if(position == 0)
+            holder.render(null, selectAchievement)
+        else
+            holder.render(item, selectAchievement)
     }
 }

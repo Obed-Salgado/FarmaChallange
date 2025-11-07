@@ -42,18 +42,6 @@ fun provideList(): List<Level> = listOf(
         nombre = "34",
         descripcion = "",
         icono = ""
-    ),
-    Level(
-        id = "123",
-        nombre = "34",
-        descripcion = "",
-        icono = ""
-    ),
-    Level(
-        id = "123",
-        nombre = "34",
-        descripcion = "",
-        icono = ""
     )
 )
 
