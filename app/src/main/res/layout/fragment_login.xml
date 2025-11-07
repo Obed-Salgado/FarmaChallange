@@ -95,12 +95,14 @@
 
     <TextView
         android:id="@+id/tvFailure"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
         android:text="Failure"
         android:textColor="@color/rojo"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/tilPassword"
         app:layout_constraintStart_toStartOf="@+id/tilPassword"
         app:layout_constraintTop_toBottomOf="@+id/tilPassword"
         tools:visibility="visible" />

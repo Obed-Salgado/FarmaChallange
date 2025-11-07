@@ -46,6 +46,7 @@ class MenuFragment : Fragment() {
         menuViewModel.showLottie.observe(viewLifecycleOwner) {
             showLottie(it)
         }
+        binding.tvLogo.text = binding.tvLogo.text.toString().uppercase()
     }
 
     private fun initRecyclerView() {

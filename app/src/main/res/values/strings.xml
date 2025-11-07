@@ -2,7 +2,7 @@
     <string name="app_name">FarmaChallange</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_game">Framachallengue</string>
+    <string name="title_game">Farmachallenge</string>
     <string name="requires_email_and_password">Se requiere ingresar un correo y una corntraseña</string>
 
     //PerfilUser
